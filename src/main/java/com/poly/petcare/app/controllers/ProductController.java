@@ -34,11 +34,16 @@ public class ProductController {
         return productService.listProduct();
     }
 
+//    @GetMapping(value = "/page")
+//    public ResponseEntity<?> page(@PageableDefault(size = 3, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
+//        return productService.page(pageable);
+//    }
     @GetMapping(value = "/page")
-    public ResponseEntity<?> page(@PageableDefault(size = 3, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
-        return productService.page(pageable);
+    public ResponseEntity<?> page(
+            @RequestParam(name = "curunpage") Integer curunpage,
+            @RequestParam(name = "totalpage") Integer totalpage) {
+        return productService.pageProduct(curunpage, totalpage);
     }
-
     @PutMapping(value = "{productID}")
     public ResponseEntity<?> edit(@PathVariable Long productID,
                                   @RequestBody ProductDTO dto) {

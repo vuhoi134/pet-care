@@ -70,15 +70,6 @@ public class ProductService extends BaseServices {
         return ResponseEntity.ok(responsesList);
     }
 
-    public ResponseEntity<?> page(Pageable pageable) {
-        Page<Product> productList = productRepository.findAll(pageable);
-        List<ProductResponses> responsesList = new ArrayList<>();
-        for (Product product : productList) {
-            ProductResponses responses = modelMapper.productResponses(product);
-            responsesList.add(responses);
-        }
-        return ResponseEntity.ok(responsesList);
-    }
 
     public ResponseEntity<?> edit(Long productID, ProductDTO productDTO) {
         Category category = categoryRepository.findById(productDTO.getCategoryID()).orElse(null);
@@ -115,6 +106,27 @@ public class ProductService extends BaseServices {
         }
         List<ProductResponses> responsesList = new ArrayList<>();
         for (Product product : list) {
+            ProductResponses responses = modelMapper.productResponses(product);
+            responsesList.add(responses);
+        }
+        return ResponseEntity.ok(responsesList);
+    }
+
+    public ResponseEntity<?> page(Pageable pageable) {
+        Page<Product> productList = productRepository.findAll(pageable);
+        List<ProductResponses> responsesList = new ArrayList<>();
+        for (Product product : productList) {
+            ProductResponses responses = modelMapper.productResponses(product);
+            responsesList.add(responses);
+        }
+        return ResponseEntity.ok(responsesList);
+    }
+
+    public ResponseEntity<?> pageProduct(Integer curunpage, Integer totalpage) {
+        Pageable pageable = PageRequest.of(curunpage, totalpage);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        List<ProductResponses> responsesList = new ArrayList<>();
+        for (Product product : productPage) {
             ProductResponses responses = modelMapper.productResponses(product);
             responsesList.add(responses);
         }
