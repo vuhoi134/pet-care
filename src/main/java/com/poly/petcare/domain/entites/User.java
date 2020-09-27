@@ -30,9 +30,7 @@ public class User {
     @JoinColumn(name = "prolife_id")
     private Profile profile;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id")
-    private Role role;
+
 
 
 

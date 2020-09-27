@@ -1,10 +1,7 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.domain.mapper.ModelMapper;
-import com.poly.petcare.domain.repository.CategoryAttributeRepository;
-import com.poly.petcare.domain.repository.CategoryAttributeValueRepository;
-import com.poly.petcare.domain.repository.CategoryRepository;
-import com.poly.petcare.domain.repository.ProductRepository;
+import com.poly.petcare.domain.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,11 +19,12 @@ public class BaseServices {
     protected CategoryAttributeValueRepository categoryAttributeValueRepository;
     @Autowired
     protected ProductRepository productRepository;
-
     @Autowired
     protected ModelMapper modelMapper;
-
-
+    @Autowired
+    protected UserRepository userRepository;
+    @Autowired
+    protected UserRoleRepository userRoleRepository;
     @Autowired
     protected PasswordEncoder passwordEncoder;
 }

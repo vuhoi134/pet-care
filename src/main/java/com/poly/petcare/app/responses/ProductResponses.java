@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class ProductResponses {
+    private Long id;
     private String productName;
     private String categoryName;
     private Double price;

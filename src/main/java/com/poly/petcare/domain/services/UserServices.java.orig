@@ -13,13 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServices extends BaseServices {
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public ResponseEntity<?> create(UserDTO dto) {
+<<<<<<< HEAD
+//    public ResponseEntity<?> create(UserDTO dto){
+//        Profile profile = Profile.builder().build();
 //        Role role = Role.builder().build();
+//        User user = User.builder()
 //                .userName(dto.getUserName())
 //                .passWord(pa)
-                .passWord(passwordEncoder.encode(dto.getPassWord()))
+//                .profile(profile)
 //                .role(role);
+//    }
+=======
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public ResponseEntity<?> create(UserDTO dto) {
+        Profile profile = Profile.builder().build();
+        User user = User.builder()
+                .userName(dto.getUserName())
+                .passWord(passwordEncoder.encode(dto.getPassWord()))
+                .profile(profile)
                 .build();
         userRepository.save(user);
 
@@ -29,4 +40,6 @@ public class UserServices extends BaseServices {
                 .build();
         userRoleRepository.save(userRole);
         return ResponseEntity.ok(true);
+    }
+>>>>>>> e43ff7ed82aaea64f11ab845339e0179472999b1
 }
