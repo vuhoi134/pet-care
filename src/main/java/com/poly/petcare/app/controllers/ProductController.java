@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/products")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/page")
-    public ResponseEntity<?> page(@PageableDefault(size = 3, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<?> page(@PageableDefault(size = 4, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
         return productService.page(pageable);
     }
 

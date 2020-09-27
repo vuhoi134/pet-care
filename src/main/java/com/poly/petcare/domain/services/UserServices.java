@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServices extends BaseServices {
-    public ResponseEntity<?> create(UserDTO dto){
-        Profile profile = Profile.builder().build();
-        Role role = Role.builder().build();
-        User user = User.builder()
-                .userName(dto.getUserName())
-                .passWord(pa)
-                .profile(profile)
-                .role(role)
-    }
+//    public ResponseEntity<?> create(UserDTO dto){
+//        Profile profile = Profile.builder().build();
+//        Role role = Role.builder().build();
+//        User user = User.builder()
+//                .userName(dto.getUserName())
+//                .passWord(pa)
+//                .profile(profile)
+//                .role(role);
+//    }
 }
