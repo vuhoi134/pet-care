@@ -15,18 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServices extends BaseServices {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> create(UserDTO dto) {
-//        Role role = Role.builder().build();
-//                .userName(dto.getUserName())
-//                .passWord(pa)
+        Profile profile = Profile.builder().build();
+        User user = User.builder()
+                .userName(dto.getUserName())
                 .passWord(passwordEncoder.encode(dto.getPassWord()))
-//                .role(role);
+                .profile(profile)
                 .build();
         userRepository.save(user);
-
         UserRole userRole = UserRole.builder()
                 .userId(user.getId())
                 .roleId(RoleIdConstant.Role_User)
                 .build();
         userRoleRepository.save(userRole);
         return ResponseEntity.ok(true);
+    }
 }

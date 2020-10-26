@@ -11,6 +11,8 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameContaining(String name);
 
+    @Query(value="select count(*) from dbo_product",nativeQuery=true)
+    int totalItem();
 
     @Query("SELECT p FROM dbo_product p WHERE LOWER(p.name)  LIKE LOWER( CONCAT('%',:name,'%'))")
     List<Product> search(@Param("name") String name);

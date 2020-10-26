@@ -1,6 +1,7 @@
 package com.poly.petcare.app.controllers;
 
 import com.poly.petcare.app.dtos.ProductDTO;
+import com.poly.petcare.domain.repository.ProductRepository;
 import com.poly.petcare.domain.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,9 @@ import javax.validation.Valid;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @PostMapping(value = "/create")
     public ResponseEntity<?> create(
@@ -45,6 +49,12 @@ public class ProductController {
             @RequestParam(name = "totalpage") Integer totalpage) {
         return productService.pageProduct(curunpage, totalpage);
     }
+
+    @GetMapping(value = "/totalItem")
+    public int total() {
+        return productRepository.totalItem();
+    }
+
     @PutMapping(value = "{productID}")
     public ResponseEntity<?> edit(@PathVariable Long productID,
                                   @RequestBody ProductDTO dto) {
