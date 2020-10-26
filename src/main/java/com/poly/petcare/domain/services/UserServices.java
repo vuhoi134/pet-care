@@ -3,7 +3,6 @@ package com.poly.petcare.domain.services;
 import com.poly.petcare.app.contant.RoleIdConstant;
 import com.poly.petcare.app.dtos.UserDTO;
 import com.poly.petcare.domain.entites.Profile;
-import com.poly.petcare.domain.entites.Role;
 import com.poly.petcare.domain.entites.User;
 import com.poly.petcare.domain.entites.UserRole;
 import org.springframework.http.ResponseEntity;

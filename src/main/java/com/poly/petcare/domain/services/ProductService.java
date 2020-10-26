@@ -2,6 +2,7 @@ package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.ProductDTO;
 import com.poly.petcare.app.responses.ProductResponses;
+import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.Category;
 import com.poly.petcare.domain.entites.CategoryAttributeValue;
 import com.poly.petcare.domain.entites.Product;
@@ -123,6 +124,7 @@ public class ProductService extends BaseServices {
     }
 
     public ResponseEntity<?> pageProduct(Integer curunpage, Integer totalpage) {
+        DataApiResult result = new DataApiResult();
         Pageable pageable = PageRequest.of(curunpage, totalpage);
         Page<Product> productPage = productRepository.findAll(pageable);
         List<ProductResponses> responsesList = new ArrayList<>();
@@ -130,7 +132,10 @@ public class ProductService extends BaseServices {
             ProductResponses responses = modelMapper.productResponses(product);
             responsesList.add(responses);
         }
-        return ResponseEntity.ok(responsesList);
+        result.setSuccess(true);
+        result.setMessage("Total Item :" + " " + productRepository.findAll().size());
+        result.setData(responsesList);
+        return ResponseEntity.ok(result);
     }
 
 
