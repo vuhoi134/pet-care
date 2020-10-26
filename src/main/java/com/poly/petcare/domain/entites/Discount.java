@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-@Entity(name = "dbo_category_attribute_value")
-public class CategoryAttributeValue {
+@Entity(name = "dbo_discount")
+public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
@@ -23,10 +22,6 @@ public class CategoryAttributeValue {
     @Column(name = "value")
     private String value;
 
-    @ManyToMany(mappedBy = "categoryAttributeValues")
-    private List<Product> product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_attribute_id")
-    private CategoryAttribute categoryAttribute;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "discount")
+    private List<Product> productList;
 }

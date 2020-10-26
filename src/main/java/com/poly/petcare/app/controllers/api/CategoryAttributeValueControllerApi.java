@@ -1,4 +1,4 @@
-package com.poly.petcare.app.controllers;
+package com.poly.petcare.app.controllers.api;
 
 import com.poly.petcare.app.dtos.CategoryAttributeValueDTO;
 import com.poly.petcare.domain.services.CategoryAttributeValueService;
@@ -10,7 +10,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v1/category-attribute-value")
-public class CategoryAttributeValueController {
+public class CategoryAttributeValueControllerApi {
     @Autowired
     private CategoryAttributeValueService categoryAttributeValueService;
 

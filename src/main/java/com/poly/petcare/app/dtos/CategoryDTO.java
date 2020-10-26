@@ -34,7 +34,7 @@ public class CategoryDTO {
     private String states;
     private List<ProductDTO> productDTOList;
 
-    private List<CategoryAttributeDTO> attribute;
+    private List<CategoryAttributeDTO> listAttribute;
 
     private List<CategoryDTO> childen;
 }

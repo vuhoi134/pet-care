@@ -27,4 +27,17 @@ public class BaseServices {
     protected UserRoleRepository userRoleRepository;
     @Autowired
     protected PasswordEncoder passwordEncoder;
+    @Autowired
+    protected ProfileRepository profileRepository;
+    @Autowired
+    protected ProductImageRepository productImageRepository;
+    @Autowired
+    protected CountryRepository countryRepository;
+    @Autowired
+    protected BrandRepository brandRepository;
+    @Autowired
+    protected DiscountRepository discountRepository;
+    @Autowired
+    protected CartProductRepository cartProductRepository;
+
 }

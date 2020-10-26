@@ -1,4 +1,4 @@
-package com.poly.petcare.app.controllers;
+package com.poly.petcare.app.controllers.api;
 
 import com.poly.petcare.app.dtos.ProductDTO;
 import com.poly.petcare.domain.services.ProductService;
@@ -14,8 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/products")
-@CrossOrigin(origins = "http://localhost:3000")
-public class ProductController {
+public class ProductControllerApi {
     @Autowired
     private ProductService productService;
 
@@ -40,15 +39,10 @@ public class ProductController {
 //        return productService.page(pageable);
 //    }
     @GetMapping(value = "/page")
-<<<<<<< HEAD
-    public ResponseEntity<?> page(@PageableDefault(size = 4, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
-        return productService.page(pageable);
-=======
     public ResponseEntity<?> page(
             @RequestParam(name = "curunpage") Integer curunpage,
             @RequestParam(name = "totalpage") Integer totalpage) {
         return productService.pageProduct(curunpage, totalpage);
->>>>>>> e43ff7ed82aaea64f11ab845339e0179472999b1
     }
     @PutMapping(value = "{productID}")
     public ResponseEntity<?> edit(@PathVariable Long productID,
@@ -59,7 +53,10 @@ public class ProductController {
     @GetMapping(value = "/search")
     public ResponseEntity<?> search(@RequestParam("name") String name) {
         return productService.search(name);
-
     }
 
+    @GetMapping(value = "list/{productID}")
+    public ResponseEntity<?> list(@PathVariable Long productID){
+        return productService.listImage(productID);
+    }
 }

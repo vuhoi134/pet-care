@@ -12,22 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-@Entity
-@Table(name = "dbo_user")
-public class User {
+@Entity(name = "dbo_brand")
+public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
     private Long id;
 
-    @Column(name = "username")
-    private String userName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "password")
-    private String passWord;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prolife_id")
-    private Profile profile;
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "brand")
+    private List<Product> productList;
 }

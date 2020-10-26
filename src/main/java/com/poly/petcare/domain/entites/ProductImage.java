@@ -6,28 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-@Entity
-@Table(name = "dbo_user")
-public class User {
+@Entity(name = "dbo_product_image")
+public class ProductImage extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
     private Long id;
 
-    @Column(name = "username")
-    private String userName;
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "password")
-    private String passWord;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prolife_id")
-    private Profile profile;
+    @Column(name = "link")
+    private String link;
 
 }

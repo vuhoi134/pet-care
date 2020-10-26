@@ -20,9 +20,23 @@ public class ProductDTO {
     @NotNull(message = "Missing the field categoryID")
     private Long categoryID;
 
+    @PositiveOrZero(message = "Do not enter negative numbers")
+    @NotNull(message = "Missing the field categoryID")
+    private Long brandID;
+
+    @PositiveOrZero(message = "Do not enter negative numbers")
+    @NotNull(message = "Missing the field categoryID")
+    private Long countryID;
+
+    @PositiveOrZero(message = "Do not enter negative numbers")
+    @NotNull(message = "Missing the field categoryID")
+    private Long discountID;
+
     @NotBlank(message = "Cannot to blank field nameProduct")
-    @Size(min = 3,max = 20)
+    @Size(min = 3, max = 20)
     private String name;
+
+    private Boolean states;
 
     @PositiveOrZero(message = "Do not enter negative numbers")
     @NotNull(message = "Missing the field Price")
@@ -32,16 +46,20 @@ public class ProductDTO {
     @NotNull(message = "Missing the field Price")
     private Integer quantity;
 
+    private Double discounts;
+
+
     @NotBlank
-    @Size(min = 5,max = 100)
+    @Size(min = 5, max = 100)
     private String description_Long;
 
     @NotBlank
-    @Size(min = 3,max = 50)
+    @Size(min = 3, max = 50)
     private String description_Short;
 
     @NotBlank
     private String mainImage;
 
+    private List<CategoryAttributeValueDTO> value;
     private List<Long> categoryAttributeValueID;
 }

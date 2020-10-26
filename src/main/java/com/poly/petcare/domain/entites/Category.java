@@ -16,8 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-@Entity
-@Table(name = "dbo_category")
+@Entity(name = "dbo_category")
 public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

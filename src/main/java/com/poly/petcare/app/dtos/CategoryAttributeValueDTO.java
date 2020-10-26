@@ -15,6 +15,10 @@ public class CategoryAttributeValueDTO {
 
     private Long id;
 
+    @NotBlank(message = "Cannot to blank field attribute")
+    @Size(min = 3,max = 100)
+    private String attribute;
+
     @NotBlank(message = "Cannot to blank field value")
     @Size(min = 3,max = 100)
     private String value;

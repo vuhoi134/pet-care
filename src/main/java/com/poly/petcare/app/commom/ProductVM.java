@@ -1,30 +1,26 @@
-package com.poly.petcare.app.responses;
+package com.poly.petcare.app.commom;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class ProductResponses {
-
+public class ProductVM {
     private Long id;
-    private String category;
-    private String brand;
-    private String country;
-    private String mainImage;
-    private String productName;
-    private Double price;
+    private String name;
+    private Double discounts;
     private Boolean states;
+    private Double price;
     private Integer quantity;
-    private Float discounts;
     private String descriptionShort;
     private String descriptionLong;
-    private List<CategoryAttributeValueResponses> values;
-
+    private String mainImage;
+    private List<ProductImageVM> productImageVMS;
 }

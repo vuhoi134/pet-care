@@ -14,7 +14,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "dbo_profile")
-public class Profile extends BaseEntity{
+public class Profile extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
@@ -31,6 +31,9 @@ public class Profile extends BaseEntity{
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "avatar")
+    private String avatar;
 
     @Column(name = "birth_day")
     private Date birthDay;
