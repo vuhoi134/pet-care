@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRoleControllerAPI {
     @Autowired
     UserRoleServices userRoleServices;
-    @GetMapping(value = "/search/{id}")
-    private ResponseEntity<?> search(@PathVariable Long id){
-        return userRoleServices.searchByRoleID(id);
-    }
+//    @GetMapping(value = "/search/{id}")
+//    private ResponseEntity<?> search(@PathVariable Long id){
+//        return userRoleServices.searchByRoleID(id);
+//    }
 }
