@@ -22,6 +22,6 @@ public class Discount {
     @Column(name = "value")
     private String value;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "discount")
-    private List<Product> productList;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "discount")
+//    private List<Product> productList;
 }

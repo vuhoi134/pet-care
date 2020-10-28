@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,4 +45,18 @@ public class Profile extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @OneToMany(mappedBy = "profile")
+    private List<Input> input;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Output> output;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Cart> carts;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Transaction> transactions;
 }

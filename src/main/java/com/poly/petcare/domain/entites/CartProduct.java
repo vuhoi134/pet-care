@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +22,15 @@ public class CartProduct {
     @Column(name = "amount")
     private Integer amount;
 
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "discount")
+    private int discount;
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -29,6 +39,5 @@ public class CartProduct {
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
 
 }

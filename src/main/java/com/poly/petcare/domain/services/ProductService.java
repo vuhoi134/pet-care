@@ -44,15 +44,15 @@ public class ProductService extends BaseServices {
         Product product = Product.builder()
                 .name(dto.getName())
                 .descriptionShort(dto.getDescription_Short())
-                .price(dto.getPrice())
-                .quantity(dto.getQuantity())
-                .states(StatesConstant.NOT_SOLD_YET)
-                .discounts(dto.getDiscounts())
+//                .price(dto.getPrice())
+//                .quantity(dto.getQuantity())
+//                .states(StatesConstant.NOT_SOLD_YET)
+//                .discounts(dto.getDiscounts())
                 .descriptionLong(dto.getDescription_Long())
                 .category(category)
                 .brand(brand)
                 .country(country)
-                .mainImage(dto.getMainImage())
+//                .mainImage(dto.getMainImage())
                 .categoryAttributeValues(categoryAttributeValues)
                 .build();
 
@@ -99,24 +99,24 @@ public class ProductService extends BaseServices {
         }
         product.setCategory(category);
         product.setBrand(brand);
-        product.setQuantity(productDTO.getQuantity());
+//        product.setQuantity(productDTO.getQuantity());
         product.setCountry(country);
-        product.setPrice(productDTO.getPrice());
-        if (product.getDiscount().getId() == 1) {
-            product.setDiscounts(product.getPrice() - product.getPrice() * 0.1);
-        } else if (product.getDiscount().getId() == 2) {
-            product.setDiscounts(product.getPrice() - product.getPrice() * 0.2);
-        } else if (product.getDiscount().getId() == 3) {
-            product.setDiscounts(product.getPrice() - product.getPrice() * 0.3);
-        }
-        product.setDiscount(discount);
-        product.setStates(productDTO.getStates());
-        product.setName(productDTO.getName());
-        product.setMainImage(productDTO.getMainImage());
-        product.setDescriptionShort(productDTO.getDescription_Short());
-        product.setDescriptionLong(productDTO.getDescription_Long());
-        product.setCategoryAttributeValues(categoryAttributeValues);
-        productRepository.saveAndFlush(product);
+//        product.setPrice(productDTO.getPrice());
+//        if (product.getDiscount().getId() == 1) {
+//            product.setDiscounts(product.getPrice() - product.getPrice() * 0.1);
+//        } else if (product.getDiscount().getId() == 2) {
+//            product.setDiscounts(product.getPrice() - product.getPrice() * 0.2);
+//        } else if (product.getDiscount().getId() == 3) {
+//            product.setDiscounts(product.getPrice() - product.getPrice() * 0.3);
+//        }
+//        product.setDiscount(discount);
+//        product.setStates(productDTO.getStates());
+//        product.setName(productDTO.getName());
+//        product.setMainImage(productDTO.getMainImage());
+//        product.setDescriptionShort(productDTO.getDescription_Short());
+//        product.setDescriptionLong(productDTO.getDescription_Long());
+//        product.setCategoryAttributeValues(categoryAttributeValues);
+//        productRepository.saveAndFlush(product);
         return ResponseEntity.ok(true);
     }
 

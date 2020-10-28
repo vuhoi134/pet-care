@@ -26,6 +26,25 @@ public class Cart {
     @Column(name = "username")
     private String userName;
 
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "address")
+    private String address;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartProduct> listCartProducts = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 }
