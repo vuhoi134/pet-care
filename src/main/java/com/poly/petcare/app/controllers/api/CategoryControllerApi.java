@@ -31,7 +31,7 @@ public class CategoryControllerApi {
         return categoryService.searchByCategory(level);
     }
 
-    @GetMapping(value = "listCategory")
+    @GetMapping(value = "/listCategory")
     public ResponseEntity<?> listCategory(
     ) {
         return categoryService.listCategory();

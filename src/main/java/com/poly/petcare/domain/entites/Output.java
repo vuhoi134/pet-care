@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Output {
     private Date import_date;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "profile_id")
     private Profile profile;
 

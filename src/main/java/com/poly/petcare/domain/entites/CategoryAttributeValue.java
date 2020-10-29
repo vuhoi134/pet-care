@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class CategoryAttributeValue {
     private List<Product> product;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "category_attribute_id")
     private CategoryAttribute categoryAttribute;
 }

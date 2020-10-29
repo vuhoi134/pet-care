@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Supplier {
     private String phoneNumber;
 
     @OneToOne(mappedBy = "supplier")
+    @JsonIgnore
     private InputDetail inputDetail;
 
 }

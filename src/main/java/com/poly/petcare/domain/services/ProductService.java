@@ -73,12 +73,12 @@ public class ProductService extends BaseServices {
 
     public ResponseEntity<?> listProduct() {
         List<Product> productList = productRepository.findAll();
-        List<ProductResponses> responsesList = new ArrayList<>();
-        for (Product product : productList) {
-            ProductResponses responses = modelMapper.productResponses(product);
-            responsesList.add(responses);
-        }
-        return ResponseEntity.ok(responsesList);
+//        List<ProductResponses> responsesList = new ArrayList<>();
+//        for (Product product : productList) {
+//            ProductResponses responses = modelMapper.productResponses(product);
+//            responsesList.add(responses);
+//        }
+        return ResponseEntity.ok(productList);
     }
 
 

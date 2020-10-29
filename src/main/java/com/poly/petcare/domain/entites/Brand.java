@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +24,6 @@ public class Brand {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "brand")
+    @JsonIgnore
     private List<Product> productList;
 }
