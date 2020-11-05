@@ -15,10 +15,11 @@ public class OutputDetail {
     private Long id;
 
     @Column(name = "quantity")
-    private Long quantity;
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)

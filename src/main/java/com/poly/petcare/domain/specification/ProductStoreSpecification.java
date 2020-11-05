@@ -1,0 +1,74 @@
+package com.poly.petcare.domain.specification;
+
+import com.poly.petcare.domain.entites.Product;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class ProductStoreSpecification {
+
+    /**
+     * Lấy ra danh sách product có quantity > 0 và quantity trong khoảng
+     * @param quantity
+     * @return
+     */
+    public static Specification<Product> hasQuantity(int quantity, String operation) {
+        if (operation.equalsIgnoreCase(">")) {
+            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("quantityStore"), quantity);
+        }
+        else if (operation.equalsIgnoreCase("<")) {
+            return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("quantityStore"), quantity);
+        }
+        return null;
+    }
+
+    /**
+     * Lấy ra danh sách product có ExpiryDate > thời gian hiện tại
+     * @param
+     * @return
+     */
+    public static Specification<Product> hasExpiryDate() {
+            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("expiryDate"), new Date().getTime());
+    }
+
+    /**
+     * Lấy ra danh sách product theo đối tượng tìm kiếm
+     * @param key,content
+     * @return
+     */
+    public static Specification<Product> hasProduct(String key,String content,String operation) {
+        if(operation.equalsIgnoreCase(":")) {
+            return (root, query, cb) -> cb.like(root.get("products").get(key), "%" + content + "%");
+        }else if(operation.equalsIgnoreCase("=")){
+                Long id = Long.parseLong(content);
+                return (root, query, cb) -> cb.equal(root.get("products").get(key), id);
+        }
+        return null;
+    }
+
+//    /**
+//     * Lấy ra danh sách product theo categoryAttributeId
+//     * @param id
+//     * @return
+//     */
+//    public static Specification<Product> hasProductCategoryAttribute(long id) {
+//        return (root, query, cb) -> cb.equal(root.get("products").get("categoryAttributeValues").get("categoryAttribute").get("id"), id);
+//    }
+
+
+    /**
+     * Lấy ra danh sách product có price theo khoảng
+     * @param price
+     * @return
+     */
+    public static Specification<Product> hasPrice(Integer price, String operation) {
+        if (operation.equalsIgnoreCase(">")) {
+            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), price);
+        }
+        else if (operation.equalsIgnoreCase("<")) {
+            return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), price);
+        }
+        return null;
+    }
+}

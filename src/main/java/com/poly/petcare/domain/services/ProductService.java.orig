@@ -9,6 +9,9 @@ import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
 
+<<<<<<< HEAD
+import com.poly.petcare.domain.repository.ProductRepository;
+=======
 import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
@@ -16,6 +19,7 @@ import com.poly.petcare.domain.repository.ProductRepository;
 import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
+>>>>>>> NguyenTuan
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +67,11 @@ public class ProductService extends BaseServices {
         }
     }
 
+<<<<<<< HEAD
+    public ResponseEntity<?> listProduct(Specification conditions, Pageable pageable) {
+=======
     public ResponseEntity<?> listProduct(Specification conditions,Pageable pageable) {
+>>>>>>> NguyenTuan
         DataApiResult result = new DataApiResult();
         List<ProductStoreResponse> responsesList = new ArrayList<>();
         Page<ProductStore> productStoreList = productStoreRepository.findAll(conditions,pageable);
@@ -231,5 +239,8 @@ public class ProductService extends BaseServices {
 //        return listProduct(conditions,pageable);
 //    }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> NguyenTuan
 }

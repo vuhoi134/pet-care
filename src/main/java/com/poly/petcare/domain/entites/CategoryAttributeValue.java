@@ -25,10 +25,10 @@ public class CategoryAttributeValue {
     private String value;
 
     @ManyToMany(mappedBy = "categoryAttributeValues")
+    @JsonIgnore
     private List<Product> product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @JoinColumn(name = "category_attribute_id")
     private CategoryAttribute categoryAttribute;
 }

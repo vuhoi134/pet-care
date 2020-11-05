@@ -22,5 +22,12 @@ public class Warehouse {
 
     @OneToMany(mappedBy = "warehouse")
     @JsonIgnore
-    private List<Product> products;
+    private List<Input> inputs;
+
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnore
+    private List<Output> outputs;
+
+    @OneToMany(mappedBy = "warehouse")
+    private List<ProductWarehouse> productWarehouse;
 }

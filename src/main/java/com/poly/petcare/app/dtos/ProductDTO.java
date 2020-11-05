@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.*;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,40 +27,30 @@ public class ProductDTO {
 
     @PositiveOrZero(message = "Do not enter negative numbers")
     @NotNull(message = "Missing the field categoryID")
-    private Long countryID;
+    private Long unitID;
 
     @PositiveOrZero(message = "Do not enter negative numbers")
     @NotNull(message = "Missing the field categoryID")
-    private Long discountID;
+    private Long warehouseID;
 
     @NotBlank(message = "Cannot to blank field nameProduct")
     @Size(min = 3, max = 20)
     private String name;
 
-    private Boolean states;
-
-    @PositiveOrZero(message = "Do not enter negative numbers")
-    @NotNull(message = "Missing the field Price")
-    private Double price;
-
-    @PositiveOrZero(message = "Do not enter negative numbers")
-    @NotNull(message = "Missing the field Price")
-    private Integer quantity;
-
-    private Double discounts;
-
+    private String code;
 
     @NotBlank
     @Size(min = 5, max = 100)
-    private String description_Long;
+    private String descriptionLong;
 
     @NotBlank
     @Size(min = 3, max = 50)
-    private String description_Short;
+    private String descriptionShort;
 
     @NotBlank
     private String mainImage;
 
     private List<CategoryAttributeValueDTO> value;
+
     private List<Long> categoryAttributeValueID;
 }

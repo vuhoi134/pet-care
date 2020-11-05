@@ -7,7 +7,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
+<<<<<<< HEAD:src/main/java/com/poly/petcare/domain/entites/ProductStore.java
+@Entity(name = "dbo_product_shop")
+=======
 @Entity(name = "dbo_product_store")
+>>>>>>> NguyenTuan:src/main/java/com/poly/petcare/domain/entites/Product_Shop.java
 public class ProductStore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

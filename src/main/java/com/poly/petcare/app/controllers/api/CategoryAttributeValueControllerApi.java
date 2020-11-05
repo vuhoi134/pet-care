@@ -29,4 +29,9 @@ public class CategoryAttributeValueControllerApi {
     public ResponseEntity<?> edit(@PathVariable Long categoryAttributeValueID, CategoryAttributeValueDTO dto) {
         return categoryAttributeValueService.edit(categoryAttributeValueID, dto);
     }
+
+    @GetMapping(value = "/find/{id}")
+    public ResponseEntity<?> find(@PathVariable Long id){
+        return categoryAttributeValueService.getCategoryAttributeValue(id);
+    }
 }

@@ -20,11 +20,13 @@ public class Order extends BaseEntity{
     @Column(name = "guid",unique = true)
     private String guid;
 
-    @Column(name = "guid",unique = true)
-    private String guid;
-
+<<<<<<< HEAD
     @Column(name = "username")
     private String userName;
+=======
+    @Column(name = "name")
+    private String name;
+>>>>>>> NguyenTuan
 
     @Column(name = "email")
     private String email;

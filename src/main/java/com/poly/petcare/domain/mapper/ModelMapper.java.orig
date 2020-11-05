@@ -17,6 +17,11 @@ import java.util.List;
 public interface ModelMapper {
     @Mappings({
             @Mapping(target = "productName", source = "name"),
+<<<<<<< HEAD
+            @Mapping(target = "mainImage", source = "mainImage"),
+=======
+//            @Mapping(target = "mainImage", source = "mainImage"),
+>>>>>>> NguyenTuan
             @Mapping(target = "category", source = "category.name"),
             @Mapping(target = "brand", source = "brand.name"),
             @Mapping(target = "values", source = "categoryAttributeValues"),

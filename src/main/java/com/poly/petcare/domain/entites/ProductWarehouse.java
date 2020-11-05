@@ -15,12 +15,16 @@ public class ProductWarehouse {
     private Long id;
 
     @Column(name = "expiry_date")
-    private Date expiryDate;
+    private Long expiryDate;
 
     @Column(name = "quantity_warehouse")
-    private Long quantityWarehouse;
+    private Integer quantityWarehouse;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product products;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 }
