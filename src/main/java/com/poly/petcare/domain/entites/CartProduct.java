@@ -17,24 +17,23 @@ public class CartProduct {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
-    private int id;
+    private Long id;
 
     @Column(name = "amount")
     private Integer amount;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "discount")
-    private int discount;
+    private Integer discount;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")

@@ -3,12 +3,12 @@ package com.poly.petcare.domain.entites;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Data
-@Entity(name = "dbo_product_warehouse")
-public class Product_Warehouse {
+@Entity(name = "dbo_product_shop")
+public class ProductStore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
@@ -17,8 +17,11 @@ public class Product_Warehouse {
     @Column(name = "expiry_date")
     private Date expiryDate;
 
-    @Column(name = "quantity_warehouse")
-    private Long quantityWarehouse;
+    @Column(name = "quantity_shop")
+    private Long quantityShop;
+
+    @Column(name = "price")
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

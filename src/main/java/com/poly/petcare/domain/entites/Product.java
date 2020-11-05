@@ -29,20 +29,8 @@ public class Product extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
-
-//    @Column(name = "discount")
-//    private Double discounts;
-//
-//    @Column(name = "states")
-//    private Boolean states;
-
-//    @Column(name = "price")
-//    private Double price;
-
-//    @Column(name = "quantity")
-//    private Integer quantity;
 
     @Column(name = "description_Short")
     private String descriptionShort;
@@ -50,8 +38,8 @@ public class Product extends BaseEntity {
     @Column(name = "description_Long")
     private String descriptionLong;
 
-//    @Column(name = "image")
-//    private String mainImage;
+    @Column(name = "image")
+    private String mainImage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<CartProduct> cartProductList = new ArrayList<>();
@@ -59,20 +47,11 @@ public class Product extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<ProductImage> productImageList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-//    @JsonIgnoreProperties({"productList","categoryAttribute"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "discount_id")
-//    private Discount discount;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
@@ -81,13 +60,8 @@ public class Product extends BaseEntity {
     @JoinTable(name = "dbo_product_attribute_value",
             joinColumns = {@JoinColumn(name = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "category_attribute_value_id")}
-
     )
     private List<CategoryAttributeValue> categoryAttributeValues;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_id")
-    private Warehouse warehouse;
 
     @OneToMany(mappedBy = "product")
     private List<InputDetail> inputDetails;
@@ -100,12 +74,15 @@ public class Product extends BaseEntity {
     private Unit unit;
 
     @OneToMany(mappedBy = "products")
-    private List<Product_Warehouse> productWarehouses;
+    private List<ProductWarehouse> productWarehouses;
 
     @OneToMany(mappedBy = "products")
-    private List<Product_Shop> productShop;
+    private List<ProductStore> productStore;
 
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+
+    @OneToMany(mappedBy = "product")
+    private List<ServiceRequestDetail> serviceRequestDetails;
 
 }

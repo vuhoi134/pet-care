@@ -20,26 +20,11 @@ public class Cart {
     @Id
     private Long id;
 
-    @Column(name = "guid")
+    @Column(name = "guid",unique = true)
     private String guid;
 
     @Column(name = "username")
     private String userName;
-
-    @Column(name = "code")
-    private String code;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "address")
-    private String address;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartProduct> listCartProducts = new ArrayList<>();

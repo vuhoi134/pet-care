@@ -16,11 +16,9 @@ import java.util.List;
 public interface ModelMapper {
     @Mappings({
             @Mapping(target = "productName", source = "name"),
-            @Mapping(target = "discounts", source = "discounts"),
             @Mapping(target = "mainImage", source = "mainImage"),
             @Mapping(target = "category", source = "category.name"),
             @Mapping(target = "brand", source = "brand.name"),
-            @Mapping(target = "country", source = "country.name"),
             @Mapping(target = "values", source = "categoryAttributeValues"),
     })
     ProductResponses productResponses(Product product);

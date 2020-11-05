@@ -14,11 +14,14 @@ public class Order extends BaseEntity{
     @Id
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "guid",unique = true)
+    private String guid;
+
+    @Column(name = "username")
+    private String userName;
 
     @Column(name = "email")
     private String email;
@@ -33,10 +36,10 @@ public class Order extends BaseEntity{
     private BigDecimal totalMoney;
 
     @Column(name = "status")
-    private int status;
+    private Integer status;
 
     @Column(name = "discount")
-    private int discount;
+    private Integer discount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")

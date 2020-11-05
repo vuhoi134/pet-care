@@ -15,6 +15,7 @@ public class CartProductDTO {
     private Long id;
     private Long productId;
     private Integer amount;
+    private String guid;
     private List<CategoryAttributeValueDTO> value;
 }
 

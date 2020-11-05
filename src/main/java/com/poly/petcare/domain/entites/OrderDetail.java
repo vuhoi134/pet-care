@@ -14,13 +14,13 @@ public class OrderDetail {
     private Long id;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "discount")
-    private int discount;
+    private Integer discount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
