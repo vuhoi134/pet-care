@@ -14,7 +14,7 @@ public class Input {
     @Id
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
 
     @Column(name = "import_date")
@@ -29,4 +29,9 @@ public class Input {
 
     @OneToMany(mappedBy = "input")
     private List<InputDetail> inputDetails;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 }

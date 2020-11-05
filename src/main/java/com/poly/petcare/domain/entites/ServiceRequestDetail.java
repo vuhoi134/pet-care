@@ -3,11 +3,10 @@ package com.poly.petcare.domain.entites;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Data
-@Entity(name = "dbo_order_detail")
-public class OrderDetail {
+@Entity(name = "dbo_service_request_detail")
+public class ServiceRequestDetail{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
@@ -16,17 +15,14 @@ public class OrderDetail {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private BigDecimal price;
-
-    @Column(name = "discount")
-    private int discount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @Column(name = "note")
+    private String note;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_request_id")
+    private ServiceRequest serviceRequest;
 }

@@ -4,6 +4,7 @@ import com.poly.petcare.app.dtos.CategoryAttributeDTO;
 import com.poly.petcare.app.dtos.CategoryAttributeValueDTO;
 import com.poly.petcare.app.dtos.CategoryDTO;
 import com.poly.petcare.app.dtos.ProductDTO;
+import com.poly.petcare.app.dtos.response.ProductResponse;
 import com.poly.petcare.app.responses.*;
 import com.poly.petcare.domain.entites.*;
 import org.mapstruct.Mapper;
@@ -16,8 +17,7 @@ import java.util.List;
 public interface ModelMapper {
     @Mappings({
             @Mapping(target = "productName", source = "name"),
-            @Mapping(target = "discounts", source = "discounts"),
-            @Mapping(target = "mainImage", source = "mainImage"),
+//            @Mapping(target = "mainImage", source = "mainImage"),
             @Mapping(target = "category", source = "category.name"),
             @Mapping(target = "brand", source = "brand.name"),
             @Mapping(target = "country", source = "country.name"),

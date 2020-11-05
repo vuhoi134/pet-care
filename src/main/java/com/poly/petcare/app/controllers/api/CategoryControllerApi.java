@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/v1/category")
@@ -35,5 +36,12 @@ public class CategoryControllerApi {
     public ResponseEntity<?> listCategory(
     ) {
         return categoryService.listCategory();
+    }
+
+    @GetMapping(value = "findByCategory/{categoryId}")
+    public ResponseEntity<?> findByCategory(@PathVariable Long categoryId,
+                                   @RequestParam(name = "page") Optional<Integer> page,
+                                   @RequestParam(name = "limit") Optional<Integer> limit){
+        return categoryService.findByCategory(page.orElse(0),limit.orElse(0),categoryId);
     }
 }

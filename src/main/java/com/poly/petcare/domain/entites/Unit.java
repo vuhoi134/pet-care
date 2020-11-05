@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,5 +17,6 @@ public class Unit {
     private String value;
 
     @OneToOne(mappedBy = "unit")
+    @JsonIgnore
     private Product product;
 }

@@ -26,7 +26,7 @@ public class Cart {
     @Column(name = "username")
     private String userName;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
 
     @Column(name = "name")

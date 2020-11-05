@@ -16,7 +16,7 @@ public class InputDetail {
     private Long id;
 
     @Column(name = "quantity")
-    private Long quantity;
+    private Integer quantity;
 
     @Column(name = "import_price")
     private BigDecimal import_price;

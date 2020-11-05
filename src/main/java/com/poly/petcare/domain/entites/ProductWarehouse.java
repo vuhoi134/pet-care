@@ -8,19 +8,23 @@ import java.util.List;
 
 @Data
 @Entity(name = "dbo_product_warehouse")
-public class Product_Warehouse {
+public class ProductWarehouse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
     private Long id;
 
     @Column(name = "expiry_date")
-    private Date expiryDate;
+    private Long expiryDate;
 
     @Column(name = "quantity_warehouse")
-    private Long quantityWarehouse;
+    private Integer quantityWarehouse;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product products;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 }

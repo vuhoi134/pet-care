@@ -32,12 +32,16 @@ public class BaseServices {
     @Autowired
     protected ProductImageRepository productImageRepository;
     @Autowired
-    protected CountryRepository countryRepository;
-    @Autowired
     protected BrandRepository brandRepository;
     @Autowired
     protected DiscountRepository discountRepository;
     @Autowired
     protected CartProductRepository cartProductRepository;
+    @Autowired
+    protected UnitRepository unitRepository;
+    @Autowired
+    protected WarehouseRepository warehouseRepository;
+    @Autowired
+    protected ProductStoreRepository productStoreRepository;
 
 }

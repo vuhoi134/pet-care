@@ -15,11 +15,11 @@ public class Output {
     @Id
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
 
     @Column(name = "export_date")
-    private Date import_date;
+    private Date export_date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
@@ -28,4 +28,8 @@ public class Output {
 
     @OneToMany(mappedBy = "output")
     private List<OutputDetail> outputDetails;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 }

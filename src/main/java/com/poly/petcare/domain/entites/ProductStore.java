@@ -7,18 +7,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@Entity(name = "dbo_product_shop")
-public class Product_Shop {
+@Entity(name = "dbo_product_store")
+public class ProductStore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
     private Long id;
 
     @Column(name = "expiry_date")
-    private Date expiryDate;
+    private Long expiryDate;
 
-    @Column(name = "quantity_shop")
-    private Long quantityShop;
+    @Column(name = "quantity_store")
+    private Integer quantityStore;
 
     @Column(name = "price")
     private BigDecimal price;

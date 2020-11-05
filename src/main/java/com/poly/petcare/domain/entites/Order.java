@@ -14,8 +14,11 @@ public class Order extends BaseEntity{
     @Id
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "code",unique = true)
     private String code;
+
+    @Column(name = "guid",unique = true)
+    private String guid;
 
     @Column(name = "name")
     private String name;
