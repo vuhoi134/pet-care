@@ -42,9 +42,6 @@ public class ProductService extends BaseServices {
     private ProductRepository productRepository;
     private CategoryAttributeValueMapper categoryAttributeValueMapper;
 
-//    @Autowired
-//    private ProductRepository productRepository1;
-
     @Autowired
     public ProductService(ProductMapper productMapper, ProductStoreMapper productStoreMapper, ProductRepository productRepository,
                           CategoryAttributeValueMapper categoryAttributeValueMapper
@@ -56,7 +53,6 @@ public class ProductService extends BaseServices {
             this.categoryAttributeValueMapper = categoryAttributeValueMapper;
         } finally {
             codeMax = productRepository.getCodeMax();
-            System.out.println(codeMax);
             if (codeMax == null) {
                 codeMax = 0L;
             }
@@ -94,7 +90,6 @@ public class ProductService extends BaseServices {
         Category category = categoryRepository.getOne(dto.getCategoryID());
         Brand brand = brandRepository.getOne(dto.getBrandID());
         Unit unit = unitRepository.getOne(dto.getUnitID());
-        Warehouse warehouse = warehouseRepository.getOne(dto.getWarehouseID());
         List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
         for (Long id : dto.getCategoryAttributeValueID()) {
             CategoryAttributeValue Value = new CategoryAttributeValue();
@@ -115,23 +110,22 @@ public class ProductService extends BaseServices {
                 .unit(unit)
                 .categoryAttributeValues(categoryAttributeValues)
                 .build();
-        productRepository.save(product);
-        return ResponseEntity.ok(true);
+        try {
+            productRepository.save(product);
+            return ResponseEntity.ok(true);
+        }catch(Exception e){
+            System.out.println(e);
+            return ResponseEntity.badRequest().body("FALSE "+e);
+        }
     }
 
     public ResponseEntity<?> listProduct(int page, int limit) {
         DataApiResult result = new DataApiResult();
         Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1, ">").
-                and(ProductStoreSpecification.hasExpiryDate()));
+                and(ProductStoreSpecification.hasExpiryDate()).and(ProductStoreSpecification.hasStatus()));
         Pageable pageable = PageRequest.of(page, limit);
         listProduct(conditions,pageable);
         return listProduct(conditions,pageable);
-
-//        DataApiResult result = new DataApiResult();
-//        List<ProductResponse> responsesList = productRepository1.listProduct(page,limit);
-//        result.setMessage("Total item product : "+productRepository.totalItem());
-//        result.setData(responsesList);
-//        return ResponseEntity.ok(result);
     }
 
     public ResponseEntity<?> detail(long id) {
@@ -161,7 +155,6 @@ public class ProductService extends BaseServices {
         Category category = categoryRepository.getOne(productDTO.getCategoryID());
         Brand brand = brandRepository.getOne(productDTO.getBrandID());
         Unit unit = unitRepository.getOne(productDTO.getUnitID());
-        Warehouse warehouse = warehouseRepository.getOne(productDTO.getWarehouseID());
         Product product = productRepository.findById(productID).orElse(null);
         if (Objects.isNull(product)) {
             throw new ResourceNotFoundException("Not found productID:" + productID);
@@ -180,8 +173,14 @@ public class ProductService extends BaseServices {
         product.setDescriptionShort(productDTO.getDescriptionShort());
         product.setDescriptionLong(productDTO.getDescriptionLong());
         product.setCategoryAttributeValues(categoryAttributeValues);
-        productRepository.saveAndFlush(product);
-        return ResponseEntity.ok(true);
+        try {
+            productRepository.saveAndFlush(product);
+            return ResponseEntity.ok(true);
+        }catch(Exception e){
+            System.out.println(e);
+            return ResponseEntity.badRequest().body("FALSE "+e);
+        }
+
     }
 
     public ResponseEntity<?> searchByName(int page, int limit, String content) {
@@ -211,7 +210,7 @@ public class ProductService extends BaseServices {
         return listProduct(conditions,pageable);
     }
 
-    public ResponseEntity<?> findByPrice(int page, int limit, Integer price1, Integer price2) {
+    public ResponseEntity<?> findByPrice(int page, int limit, BigDecimal price1, BigDecimal price2) {
         DataApiResult result = new DataApiResult();
         Specification conditions = Specification.where(ProductStoreSpecification.hasPrice(price1,">").
                 and(ProductStoreSpecification.hasPrice(price2,"<"))

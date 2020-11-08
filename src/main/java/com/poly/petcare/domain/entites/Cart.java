@@ -26,6 +26,9 @@ public class Cart {
     @Column(name = "username")
     private String userName;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartProduct> listCartProducts = new ArrayList<>();
 

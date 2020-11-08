@@ -23,6 +23,9 @@ public class Input {
     @Column(name = "transporter")
     private String transporter;
 
+    @Column(name = "phone_transporter")
+    private String phoneTransporter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;

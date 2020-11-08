@@ -74,15 +74,29 @@ public class CategoryServices extends BaseServices {
         return ResponseEntity.ok(dtoList);
     }
 
+    public ResponseEntity<?> getCategory(Long id) {
+        Specification conditions = Specification.where(CategorySpecification.hasCategory("id",id));
+        List<Category> list = categoryRepository.findAll(conditions);
+        if (list.isEmpty()) {
+            throw new ResourceNotFoundException("Empty");
+        }
+        List<CategoryResponses> dtoList = new ArrayList<>();
+        for (Category category : list) {
+            CategoryResponses responses = modelMapper.categoryToResponse(category);
+            dtoList.add(responses);
+        }
+        return ResponseEntity.ok(dtoList);
+    }
+
     public ResponseEntity listCategory() {
         List<Category> categoryList = categoryRepository.findAll();
-//        List<CategoryResponses> dtoList = new ArrayList<>();
-//        for (Category category : categoryList) {
-//            CategoryResponses responses = modelMapper.categoryToResponse(category);
-//            if (responses.getLevel().equals(0)) {
-//                dtoList.add(responses);
-//            }
-//        }
+        List<CategoryResponses> dtoList = new ArrayList<>();
+        for (Category category : categoryList) {
+            CategoryResponses responses = modelMapper.categoryToResponse(category);
+            if (responses.getLevel().equals(0)) {
+                dtoList.add(responses);
+            }
+        }
         return ResponseEntity.ok(categoryList);
     }
 

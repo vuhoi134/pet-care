@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,14 @@ public class Product extends BaseEntity {
     @Column(name = "description_Long")
     private String descriptionLong;
 
-    @Column(name = "image")
+    @Column(name = "main_image")
     private String mainImage;
+
+    @Column(name = "status")
+    private Boolean status;
+
+    @Column(name = "price")
+    private BigDecimal price;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<CartProduct> cartProductList = new ArrayList<>();

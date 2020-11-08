@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductStoreResponse {
     private Integer quantity;
-    private BigDecimal price;
     private Long expiryDate;
+    private String tag;
     private ProductResponse product;
 }

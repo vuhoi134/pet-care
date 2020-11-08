@@ -2,11 +2,6 @@ package com.poly.petcare.app.controllers.api;
 
 import com.poly.petcare.app.dtos.ProductDTO;
 import com.poly.petcare.domain.services.ProductService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +61,8 @@ public class ProductControllerApi {
     @GetMapping(value = "findByPrice")
     public ResponseEntity<?> findByPrice(@RequestParam(name = "page") Optional<Integer> page,
                                      @RequestParam(name = "limit") Optional<Integer> limit,
-                                     @RequestParam(name = "price1") Integer price1,
-                                     @RequestParam(name = "price2") Integer price2){
+                                     @RequestParam(name = "price1") BigDecimal price1,
+                                     @RequestParam(name = "price2") BigDecimal price2){
         return productService.findByPrice(page.orElse(0),limit.orElse(0),price1,price2);
     }
 }

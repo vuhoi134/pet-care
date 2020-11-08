@@ -33,6 +33,15 @@ public class ProductStoreSpecification {
     }
 
     /**
+     * Lấy ra danh sách product có ExpiryDate > thời gian hiện tại
+     * @param
+     * @return
+     */
+    public static Specification<Product> hasStatus() {
+        return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("products").get("status"), true);
+    }
+
+    /**
      * Lấy ra danh sách product theo đối tượng tìm kiếm
      * @param key,content
      * @return
@@ -62,12 +71,12 @@ public class ProductStoreSpecification {
      * @param price
      * @return
      */
-    public static Specification<Product> hasPrice(Integer price, String operation) {
+    public static Specification<Product> hasPrice(BigDecimal price, String operation) {
         if (operation.equalsIgnoreCase(">")) {
-            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), price);
+            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("products").get("price"), price);
         }
         else if (operation.equalsIgnoreCase("<")) {
-            return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), price);
+            return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("products").get("price"), price);
         }
         return null;
     }

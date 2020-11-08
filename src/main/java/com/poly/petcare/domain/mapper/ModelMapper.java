@@ -26,7 +26,7 @@ public interface ModelMapper {
     @Mappings({
             @Mapping(target = "parentId", source = "parentId.id"),
             @Mapping(target = "childen", source = "children"),
-            @Mapping(target = "productDTOList", source = "productList"),
+//            @Mapping(target = "productDTOList", source = "productList"),
             @Mapping(target = "listAttribute", source = "listAttribute")
     })
     CategoryResponses categoryToResponse(Category category);

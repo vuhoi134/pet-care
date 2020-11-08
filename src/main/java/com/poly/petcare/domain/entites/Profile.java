@@ -65,4 +65,10 @@ public class Profile extends BaseEntity {
 
     @OneToMany(mappedBy = "profile")
     private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Warehouse> warehouses;
+
+    @OneToMany(mappedBy = "profile")
+    private List<ServiceRequest> serviceRequests;
 }

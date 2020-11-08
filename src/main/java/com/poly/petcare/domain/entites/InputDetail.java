@@ -15,11 +15,17 @@ public class InputDetail {
     @Id
     private Long id;
 
-    @Column(name = "quantity")
-    private Integer quantity;
-
     @Column(name = "import_price")
     private BigDecimal import_price;
+
+    @Column(name = "theoretical_amount")
+    private Long theoreticalAmount;
+
+    @Column(name = "actual_amount")
+    private Long actualAmount;
+
+    @Column(name = "status")
+    private Integer status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -30,7 +36,7 @@ public class InputDetail {
     @JoinColumn(name = "input_id")
     private Input input;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 

@@ -34,8 +34,6 @@ public class BaseServices {
     @Autowired
     protected BrandRepository brandRepository;
     @Autowired
-    protected DiscountRepository discountRepository;
-    @Autowired
     protected CartProductRepository cartProductRepository;
     @Autowired
     protected UnitRepository unitRepository;

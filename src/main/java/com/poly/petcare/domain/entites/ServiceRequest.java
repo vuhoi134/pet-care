@@ -18,4 +18,8 @@ public class ServiceRequest extends BaseEntity{
 
     @OneToMany(mappedBy = "serviceRequest")
     private List<ServiceRequestDetail> serviceRequestDetails;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prifile_id")
+    private Profile profile;
 }

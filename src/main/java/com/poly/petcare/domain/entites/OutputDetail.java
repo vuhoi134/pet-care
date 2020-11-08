@@ -14,8 +14,14 @@ public class OutputDetail {
     @Id
     private Long id;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "theoretical_amount")
+    private Long theoreticalAmount;
+
+    @Column(name = "actual_amount")
+    private Long actualAmount;
+
+    @Column(name = "status")
+    private Integer status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")

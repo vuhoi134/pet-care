@@ -18,10 +18,10 @@ public class ProductStore {
     private Long expiryDate;
 
     @Column(name = "quantity_store")
-    private Integer quantityStore;
+    private Long quantityStore;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Column(name = "tag")
+    private String tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
