@@ -1,6 +1,6 @@
 package com.poly.petcare.domain.mapper;
 
-import com.poly.petcare.app.dtos.response.ProductResponse;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.domain.entites.Product;
 import org.springframework.stereotype.Component;
 import org.modelmapper.ModelMapper;

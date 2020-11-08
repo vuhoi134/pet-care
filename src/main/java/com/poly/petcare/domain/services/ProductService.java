@@ -1,9 +1,8 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.ProductDTO;
-import com.poly.petcare.app.dtos.response.CategoryAttributeValueResponses;
-import com.poly.petcare.app.dtos.response.ProductResponse;
-import com.poly.petcare.app.responses.ProductResponses;
+import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.app.responses.ProductStoreResponse;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
@@ -13,7 +12,6 @@ import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
 import com.poly.petcare.domain.repository.ProductRepository;
-import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.apache.logging.log4j.LogManager;

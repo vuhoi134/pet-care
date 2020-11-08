@@ -1,17 +1,13 @@
-package com.poly.petcare.app.dtos.response;
+package com.poly.petcare.app.responses;
 
-import com.poly.petcare.domain.entites.Brand;
-import com.poly.petcare.domain.entites.CategoryAttributeValue;
+import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
 import com.poly.petcare.domain.entites.ProductImage;
-import com.poly.petcare.domain.entites.Unit;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor

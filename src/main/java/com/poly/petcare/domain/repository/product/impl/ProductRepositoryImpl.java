@@ -1,12 +1,10 @@
 package com.poly.petcare.domain.repository.product.impl;
 
-import com.poly.petcare.app.dtos.response.ProductResponse;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.domain.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.List;
 

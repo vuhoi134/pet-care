@@ -28,8 +28,6 @@ public class CategoryResponses {
 
     private String states;
 
-//    private List<ProductResponses> productDTOList;
-
     private List<CategoryAttributeResponses> listAttribute;
 
     private List<CategoryResponses> childen;
