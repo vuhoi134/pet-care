@@ -20,8 +20,6 @@ public class Order extends BaseEntity{
     @Column(name = "guid",unique = true)
     private String guid;
 
-    @Column(name = "guid",unique = true)
-    private String guid;
 
     @Column(name = "username")
     private String userName;
