@@ -18,7 +18,7 @@ public class ProductWarehouse {
     private Long expiryDate;
 
     @Column(name = "quantity_warehouse")
-    private Integer quantityWarehouse;
+    private Long quantityWarehouse;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

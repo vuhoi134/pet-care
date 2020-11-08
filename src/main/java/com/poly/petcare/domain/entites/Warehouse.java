@@ -30,4 +30,8 @@ public class Warehouse {
 
     @OneToMany(mappedBy = "warehouse")
     private List<ProductWarehouse> productWarehouse;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 }

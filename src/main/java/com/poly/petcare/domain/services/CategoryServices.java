@@ -1,26 +1,20 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.CategoryDTO;
-import com.poly.petcare.app.dtos.ProductDTO;
-import com.poly.petcare.app.dtos.response.CategoryAttributeValueResponses;
-import com.poly.petcare.app.dtos.response.ProductResponse;
+import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.app.responses.CategoryResponses;
-import com.poly.petcare.app.responses.ProductResponses;
 import com.poly.petcare.app.responses.ProductStoreResponse;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.Category;
 import com.poly.petcare.domain.entites.CategoryAttributeValue;
-import com.poly.petcare.domain.entites.Product;
 import com.poly.petcare.domain.entites.ProductStore;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
 import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
-import com.poly.petcare.domain.repository.ProductRepository;
-import com.poly.petcare.domain.services.BaseServices;
 import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -74,15 +68,29 @@ public class CategoryServices extends BaseServices {
         return ResponseEntity.ok(dtoList);
     }
 
+    public ResponseEntity<?> getCategory(Long id) {
+        Specification conditions = Specification.where(CategorySpecification.hasCategory("id",id));
+        List<Category> list = categoryRepository.findAll(conditions);
+        if (list.isEmpty()) {
+            throw new ResourceNotFoundException("Empty");
+        }
+        List<CategoryResponses> dtoList = new ArrayList<>();
+        for (Category category : list) {
+            CategoryResponses responses = modelMapper.categoryToResponse(category);
+            dtoList.add(responses);
+        }
+        return ResponseEntity.ok(dtoList);
+    }
+
     public ResponseEntity listCategory() {
         List<Category> categoryList = categoryRepository.findAll();
-//        List<CategoryResponses> dtoList = new ArrayList<>();
-//        for (Category category : categoryList) {
-//            CategoryResponses responses = modelMapper.categoryToResponse(category);
-//            if (responses.getLevel().equals(0)) {
-//                dtoList.add(responses);
-//            }
-//        }
+        List<CategoryResponses> dtoList = new ArrayList<>();
+        for (Category category : categoryList) {
+            CategoryResponses responses = modelMapper.categoryToResponse(category);
+            if (responses.getLevel().equals(0)) {
+                dtoList.add(responses);
+            }
+        }
         return ResponseEntity.ok(categoryList);
     }
 

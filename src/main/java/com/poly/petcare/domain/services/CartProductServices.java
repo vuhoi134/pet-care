@@ -18,8 +18,10 @@ import java.util.List;
 
 @Service
 public class CartProductServices extends BaseServices {
-//    @Transactional(isolation = Isolation.SERIALIZABLE)
-//    public ResponseEntity<?> addToCart(CartProductDTO dto) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public ResponseEntity<?> addToCart(CartProductDTO dto) {
+
 //        Cart cartEntity = cartProductRepository.
-//    }
+        return null;
+    }
 }

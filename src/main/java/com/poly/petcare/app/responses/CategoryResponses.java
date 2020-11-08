@@ -27,7 +27,6 @@ public class CategoryResponses {
     private String name;
 
     private String states;
-    private List<ProductResponses> productDTOList;
 
     private List<CategoryAttributeResponses> listAttribute;
 

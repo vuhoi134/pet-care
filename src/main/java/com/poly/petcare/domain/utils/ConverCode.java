@@ -1,9 +1,11 @@
 package com.poly.petcare.domain.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ConverCode {
     public static String convertCode(Long codeMax, String DTOCode, String prefix) {
         String code;
-        if (DTOCode != null) {
+        if (StringUtils.isNotBlank(DTOCode)) {
             code = DTOCode;
         } else {
             if (codeMax == null) {

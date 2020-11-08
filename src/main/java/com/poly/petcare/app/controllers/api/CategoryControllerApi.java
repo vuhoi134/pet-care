@@ -44,4 +44,10 @@ public class CategoryControllerApi {
                                    @RequestParam(name = "limit") Optional<Integer> limit){
         return categoryService.findByCategory(page.orElse(0),limit.orElse(0),categoryId);
     }
+
+    @GetMapping(value = "getCategory")
+    public ResponseEntity<?> getCategory(@RequestParam(name = "id") Long id,
+                                         @RequestParam(name = "level") Integer level){
+        return categoryService.getCategory(id);
+    }
 }

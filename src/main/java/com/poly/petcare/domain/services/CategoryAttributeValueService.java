@@ -1,9 +1,8 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.CategoryAttributeValueDTO;
-import com.poly.petcare.app.dtos.response.CategoryAttributeValueResponses;
-import com.poly.petcare.app.dtos.response.ProductResponse;
-import com.poly.petcare.app.responses.ProductStoreResponse;
+import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.domain.entites.CategoryAttribute;
 import com.poly.petcare.domain.entites.CategoryAttributeValue;
 import com.poly.petcare.domain.entites.Product;

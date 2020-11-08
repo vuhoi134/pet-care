@@ -30,5 +30,6 @@ public class CategoryAttributeValue {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_attribute_id")
+    @JsonIgnore
     private CategoryAttribute categoryAttribute;
 }

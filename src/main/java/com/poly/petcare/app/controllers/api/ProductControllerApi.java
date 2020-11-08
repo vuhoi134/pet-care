@@ -61,8 +61,8 @@ public class ProductControllerApi {
     @GetMapping(value = "findByPrice")
     public ResponseEntity<?> findByPrice(@RequestParam(name = "page") Optional<Integer> page,
                                      @RequestParam(name = "limit") Optional<Integer> limit,
-                                     @RequestParam(name = "price1") Integer price1,
-                                     @RequestParam(name = "price2") Integer price2){
+                                     @RequestParam(name = "price1") BigDecimal price1,
+                                     @RequestParam(name = "price2") BigDecimal price2){
         return productService.findByPrice(page.orElse(0),limit.orElse(0),price1,price2);
     }
 }

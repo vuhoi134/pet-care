@@ -17,9 +17,10 @@ import javax.validation.Valid;
 public class CartProductControllerApi {
     @Autowired
     private CartProductServices cartProductServices;
-//
-//    @PostMapping("/create")
-//    public ResponseEntity<?> create(@Valid @RequestBody CartProductDTO dto) {
+
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@Valid @RequestBody CartProductDTO dto) {
+        return null;
 //        return cartProductServices.create(dto);
-//    }
+    }
 }

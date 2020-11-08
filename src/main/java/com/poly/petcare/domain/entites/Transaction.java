@@ -18,6 +18,9 @@ public class Transaction extends BaseEntity{
     @Column(name = "name")
     private String name;
 
+    @Column(name = "status")
+    private Integer status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;

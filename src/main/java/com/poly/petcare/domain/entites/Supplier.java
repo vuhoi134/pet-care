@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity(name = "dbo_supplier")
@@ -25,8 +26,8 @@ public class Supplier {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "supplier")
+    @OneToMany(mappedBy = "supplier")
     @JsonIgnore
-    private InputDetail inputDetail;
+    private List<InputDetail> inputDetails;
 
 }

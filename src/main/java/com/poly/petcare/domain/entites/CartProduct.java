@@ -31,6 +31,9 @@ public class CartProduct {
     @Column(name = "discount")
     private Integer discount;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
