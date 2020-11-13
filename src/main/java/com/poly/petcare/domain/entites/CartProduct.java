@@ -22,12 +22,6 @@ public class CartProduct {
     @Column(name = "amount")
     private Integer amount;
 
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    @Column(name = "price")
-    private BigDecimal price;
-
     @Column(name = "discount")
     private Integer discount;
 
