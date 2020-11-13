@@ -80,4 +80,22 @@ public class ProductStoreSpecification {
         }
         return null;
     }
+
+    /**
+     * Lấy ra danh sách product theo categoryId
+     * @param id
+     * @return
+     */
+    public static Specification<Product> hasProductCategory(long id) {
+        return (root, query, cb) -> cb.equal(root.get("products").get("category").get("id"), id);
+    }
+
+    /**
+     * Lấy ra danh sách product theo brandId
+     * @param id
+     * @return
+     */
+    public static Specification<Product> hasProductBrand(long id) {
+        return (root, query, cb) -> cb.equal(root.get("products").get("brand").get("id"), id);
+    }
 }

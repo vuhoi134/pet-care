@@ -1,6 +1,7 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.ProductDTO;
+import com.poly.petcare.app.request.ProductRequestFind;
 import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
 import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.app.responses.ProductStoreResponse;
@@ -12,6 +13,7 @@ import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
 import com.poly.petcare.domain.repository.ProductRepository;
+import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.apache.logging.log4j.LogManager;
@@ -77,7 +79,8 @@ public class ProductService extends BaseServices {
             productStoreResponse.setProduct(productResponse);
             responsesList.add(productStoreResponse);
         }
-        result.setMessage("Total item product : "+productStoreList.getTotalElements());
+        result.setMessage("List Product : ");
+        result.setTotalItem(productStoreList.getTotalElements());
         result.setData(responsesList);
         result.setSuccess(true);
         return ResponseEntity.ok(result);
@@ -216,6 +219,62 @@ public class ProductService extends BaseServices {
         Pageable pageable = PageRequest.of(page, limit);
         listProduct(conditions,pageable);
         return listProduct(conditions,pageable);
+    }
+
+    public ResponseEntity<?> findByPriceAndCategory(int page, int limit, BigDecimal price1,BigDecimal price2,Long categoryId,Long brandId) {
+        DataApiResult result = new DataApiResult();
+        if (price2.intValue()>price1.intValue() && brandId > 0 && categoryId > 0) {
+            Specification conditions = Specification.where(ProductStoreSpecification.hasPrice(price1, ">").
+                    and(ProductStoreSpecification.hasPrice(price2, "<")).
+                    and(ProductStoreSpecification.hasProductBrand(brandId)).
+                    and(ProductStoreSpecification.hasProductCategory(categoryId))
+            );
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price2.intValue()>price1.intValue() && brandId == 0 && categoryId > 0){
+            Specification conditions = Specification.where(ProductStoreSpecification.hasPrice(price1, ">").
+                    and(ProductStoreSpecification.hasPrice(price2, "<")).
+                    and(ProductStoreSpecification.hasProductCategory(categoryId))
+            );
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price2.intValue()>price1.intValue() && brandId > 0 && categoryId == 0){
+            Specification conditions = Specification.where(ProductStoreSpecification.hasPrice(price1, ">").
+                    and(ProductStoreSpecification.hasPrice(price2, "<")).
+                    and(ProductStoreSpecification.hasProductBrand(brandId))
+            );
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price2.intValue()==0 && price2.intValue()==0 && brandId > 0 && categoryId > 0){
+            Specification conditions = Specification.where(ProductStoreSpecification.hasProductCategory(categoryId).
+                    and(ProductStoreSpecification.hasProductBrand(brandId))
+            );
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price1.intValue()==0 && price2.intValue()==0 &&  brandId == 0 && categoryId > 0){
+            Specification conditions = Specification.where(ProductStoreSpecification.hasProductCategory(categoryId));
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price1.intValue()==0 && price2.intValue()==0 &&  brandId > 0 && categoryId == 0){
+            Specification conditions = Specification.where(ProductStoreSpecification.hasProductBrand(brandId));
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else if(price2.intValue()>price1.intValue()&&  brandId == 0 && categoryId == 0) {
+            Specification conditions = Specification.where(ProductStoreSpecification.hasPrice(price1, ">").
+                    and(ProductStoreSpecification.hasPrice(price2, "<"))
+            );
+            Pageable pageable = PageRequest.of(page, limit);
+            listProduct(conditions, pageable);
+            return listProduct(conditions, pageable);
+        }else{
+            return null;
+        }
     }
 
 //    public ResponseEntity<?> findByCategoryAttributeValue(int page,int limit,long id) {

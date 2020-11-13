@@ -83,6 +83,7 @@ public class CategoryServices extends BaseServices {
     }
 
     public ResponseEntity listCategory() {
+        DataApiResult result = new DataApiResult();
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponses> dtoList = new ArrayList<>();
         for (Category category : categoryList) {
@@ -91,7 +92,11 @@ public class CategoryServices extends BaseServices {
                 dtoList.add(responses);
             }
         }
-        return ResponseEntity.ok(categoryList);
+        result.setTotalItem(Long.valueOf(dtoList.size()));
+        result.setData(categoryList);
+        result.setSuccess(true);
+        result.setMessage("List Category");
+        return ResponseEntity.ok(result);
     }
 
     public ResponseEntity<?> findByCategory(int page,int limit,long id) {
@@ -99,6 +104,22 @@ public class CategoryServices extends BaseServices {
         Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1,">").
                 and(CategorySpecification.hasProductCategory(id))
         );
+        Pageable pageable = PageRequest.of(page, limit);
+        listProduct(conditions,pageable);
+        return listProduct(conditions,pageable);
+    }
+
+    public ResponseEntity<?> findByListCategory(int page,int limit,List<Long> id) {
+        DataApiResult result = new DataApiResult();
+        Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1,">")
+        );
+        for (int i=0;i<id.size();i++){
+            if(i>0){
+                conditions = conditions.or(ProductStoreSpecification.hasProductCategory(id.get(i)));
+            }else {
+                conditions = conditions.and(ProductStoreSpecification.hasProductCategory(id.get(i)));
+            }
+        }
         Pageable pageable = PageRequest.of(page, limit);
         listProduct(conditions,pageable);
         return listProduct(conditions,pageable);
@@ -124,7 +145,8 @@ public class CategoryServices extends BaseServices {
             productStoreResponse.setProduct(productResponse);
             responsesList.add(productStoreResponse);
         }
-        result.setMessage("Total item product : "+productStoreList.getTotalElements());
+        result.setMessage("List product find by Category : ");
+        result.setTotalItem(productStoreList.getTotalElements());
         result.setData(responsesList);
         result.setSuccess(true);
         return ResponseEntity.ok(result);

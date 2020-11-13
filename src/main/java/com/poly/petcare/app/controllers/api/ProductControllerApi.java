@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/products")
+@CrossOrigin
 public class ProductControllerApi {
 
     @Autowired
@@ -65,4 +65,15 @@ public class ProductControllerApi {
                                      @RequestParam(name = "price2") BigDecimal price2){
         return productService.findByPrice(page.orElse(0),limit.orElse(0),price1,price2);
     }
+
+    @GetMapping(value = "findByPriceAndCategory")
+    public ResponseEntity<?> findByPriceAndCategory(@RequestParam(name = "page") Optional<Integer> page,
+                                                    @RequestParam(name = "limit") Optional<Integer> limit,
+                                                    @RequestParam(name = "price1") BigDecimal price1,
+                                                    @RequestParam(name = "price2") BigDecimal price2,
+                                                    @RequestParam(name = "categoryId") Long categoryId,
+                                                    @RequestParam(name = "brandId") Long brandId){
+        return productService.findByPriceAndCategory(page.orElse(0),limit.orElse(0),price1,price2,categoryId,brandId);
+    }
+
 }
