@@ -1,5 +1,6 @@
 package com.poly.petcare.domain.services;
 
+import com.poly.petcare.domain.entites.CartProduct;
 import com.poly.petcare.domain.mapper.ModelMapper;
 import com.poly.petcare.domain.repository.*;
 import lombok.AllArgsConstructor;
@@ -41,5 +42,14 @@ public class BaseServices {
     protected WarehouseRepository warehouseRepository;
     @Autowired
     protected ProductStoreRepository productStoreRepository;
+    @Autowired
+    protected CartRepository cartRepository;
+    public CartProduct findFirstCartProductByCartIdAndProductId(int cartId, int productId) {
+        try {
+            return cartProductRepository.findFirstCartProductByCartIdAndProductId(cartId,productId);
+        }catch (Exception e) {
 
+        }
+        return null;
+    }
 }
