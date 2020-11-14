@@ -20,8 +20,8 @@ public class ProductStore {
     @Column(name = "quantity_store")
     private Long quantityStore;
 
-    @Column(name = "tag")
-    private String tag;
+    @Column(name = "code_tag")
+    private String codeTag;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

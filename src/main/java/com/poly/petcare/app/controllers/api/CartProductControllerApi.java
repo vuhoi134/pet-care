@@ -12,16 +12,18 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/cart-product")
+@CrossOrigin
 public class CartProductControllerApi {
     @Autowired
     private CartProductServices cartProductServices;
 
     @PostMapping("/create")
     public BaseApiResult create(@Valid @RequestBody CartProductDTO dto) {
-    return cartProductServices.addToCart(dto);
+        return cartProductServices.addToCart(dto);
     }
+
     @DeleteMapping("delete/{cartProductId}")
-    public BaseApiResult delete(@PathVariable long cartProductId){
+    public BaseApiResult delete(@PathVariable long cartProductId) {
         return cartProductServices.deleteCartProduct(cartProductId);
     }
 }

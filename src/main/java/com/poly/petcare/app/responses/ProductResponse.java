@@ -31,7 +31,7 @@ public class ProductResponse {
 
     private String brandName;
 
-    private String unitValue;
+    private String unit;
 
     private String categoryId;
 

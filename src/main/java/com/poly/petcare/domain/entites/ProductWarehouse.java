@@ -17,6 +17,9 @@ public class ProductWarehouse {
     @Column(name = "expiry_date")
     private Long expiryDate;
 
+    @Column(name = "code_tag")
+    private String codeTag;
+
     @Column(name = "quantity_warehouse")
     private Long quantityWarehouse;
 

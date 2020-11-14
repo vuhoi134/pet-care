@@ -24,6 +24,9 @@ public class InputDetail {
     @Column(name = "actual_amount")
     private Long actualAmount;
 
+    @Column(name = "code_tag")
+    private String codeTag;
+
     @Column(name = "status")
     private Integer status;
 
@@ -40,7 +43,4 @@ public class InputDetail {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @OneToOne(mappedBy = "inputDetail")
-    @JsonIgnore
-    private OutputDetail outputDetail;
 }

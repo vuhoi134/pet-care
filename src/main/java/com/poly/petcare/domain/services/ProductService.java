@@ -1,7 +1,6 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.ProductDTO;
-import com.poly.petcare.app.request.ProductRequestFind;
 import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
 import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.app.responses.ProductStoreResponse;
@@ -90,7 +89,6 @@ public class ProductService extends BaseServices {
     public ResponseEntity createProduct(ProductDTO dto) {
         Category category = categoryRepository.getOne(dto.getCategoryID());
         Brand brand = brandRepository.getOne(dto.getBrandID());
-        Unit unit = unitRepository.getOne(dto.getUnitID());
         List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
         for (Long id : dto.getCategoryAttributeValueID()) {
             CategoryAttributeValue Value = new CategoryAttributeValue();
@@ -108,7 +106,7 @@ public class ProductService extends BaseServices {
                 .descriptionLong(dto.getDescriptionLong())
                 .category(category)
                 .brand(brand)
-                .unit(unit)
+                .unit(dto.getUnit())
                 .categoryAttributeValues(categoryAttributeValues)
                 .build();
         try {
@@ -155,7 +153,6 @@ public class ProductService extends BaseServices {
     public ResponseEntity<?> edit(Long productID, ProductDTO productDTO) {
         Category category = categoryRepository.getOne(productDTO.getCategoryID());
         Brand brand = brandRepository.getOne(productDTO.getBrandID());
-        Unit unit = unitRepository.getOne(productDTO.getUnitID());
         Product product = productRepository.findById(productID).orElse(null);
         if (Objects.isNull(product)) {
             throw new ResourceNotFoundException("Not found productID:" + productID);
@@ -168,7 +165,7 @@ public class ProductService extends BaseServices {
         }
         product.setCategory(category);
         product.setBrand(brand);
-        product.setUnit(unit);
+        product.setUnit(productDTO.getUnit());
         product.setName(productDTO.getName());
         product.setMainImage(productDTO.getMainImage());
         product.setDescriptionShort(productDTO.getDescriptionShort());

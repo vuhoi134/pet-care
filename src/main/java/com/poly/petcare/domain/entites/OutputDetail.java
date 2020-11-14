@@ -20,6 +20,9 @@ public class OutputDetail {
     @Column(name = "actual_amount")
     private Long actualAmount;
 
+    @Column(name = "code_tag")
+    private String codeTag;
+
     @Column(name = "status")
     private Integer status;
 
@@ -33,7 +36,4 @@ public class OutputDetail {
     @JoinColumn(name = "output_id")
     private Output output;
 
-    @OneToOne
-    @JoinColumn(name = "input_detail_id")
-    private InputDetail inputDetail;
 }

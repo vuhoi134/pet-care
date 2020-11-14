@@ -26,9 +26,8 @@ public class ProductDTO {
     @NotNull(message = "Missing the field categoryID")
     private Long brandID;
 
-    @PositiveOrZero(message = "Do not enter negative numbers")
-    @NotNull(message = "Missing the field categoryID")
-    private Long unitID;
+    @NotNull(message = "Missing the field unit")
+    private String unit;
 
     @NotBlank(message = "Cannot to blank field nameProduct")
     @Size(min = 3, max = 20)

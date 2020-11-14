@@ -43,6 +43,9 @@ public class Product extends BaseEntity {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "unit")
+    private String unit;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<CartProduct> cartProductList = new ArrayList<>();
 
@@ -70,10 +73,6 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<OutputDetail> outputDetails;
-
-    @OneToOne
-    @JoinColumn(name = "unit_id")
-    private Unit unit;
 
     @OneToMany(mappedBy = "products")
     private List<ProductWarehouse> productWarehouses;
