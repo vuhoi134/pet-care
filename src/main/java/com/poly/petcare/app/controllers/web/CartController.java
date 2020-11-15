@@ -74,7 +74,6 @@ public class CartController extends BaseController{
         vm.setCartProductVMS(cartProductVMS);
         vm.setTotalPrice(df.format(totalPrice));
         model.addAttribute("vm",vm);
-
         return "/cart";
     }
 
