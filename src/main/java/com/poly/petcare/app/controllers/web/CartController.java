@@ -59,9 +59,9 @@ public class CartController extends BaseController{
                         cartProductVM.setProductName(cartProduct.getProduct().getName());
                         cartProductVM.setMainImage(cartProduct.getProduct().getMainImage());
                         cartProductVM.setAmount(cartProduct.getAmount());
-//                        Double price = cartProduct.getAmount()*cartProduct.getProduct().getPrice();
-//                        cartProductVM.setPrice(df.format(price));
-//                        totalPrice += price;
+                        Double price = cartProduct.getAmount()*cartProduct.getProduct().getPrice().doubleValue();
+                        cartProductVM.setPrice(df.format(price));
+                        totalPrice += price;
                         cartProductVMS.add(cartProductVM);
                     }
                 }
@@ -74,7 +74,6 @@ public class CartController extends BaseController{
         vm.setCartProductVMS(cartProductVMS);
         vm.setTotalPrice(df.format(totalPrice));
         model.addAttribute("vm",vm);
-
         return "/cart";
     }
 
