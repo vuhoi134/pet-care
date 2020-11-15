@@ -14,8 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-@Entity
-        (name = "dbo_product")
+@Entity(name = "dbo_product")
 public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
