@@ -50,4 +50,10 @@ public class BaseServices {
         }
         return null;
     }
+    @Autowired
+    protected OrderRepository orderRepository;
+    @Autowired
+    protected OrderDetailRepository orderDetailRepository;
+    @Autowired
+    protected TransactionRepository transactionRepository;
 }

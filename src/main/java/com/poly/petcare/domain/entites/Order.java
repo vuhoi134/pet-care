@@ -42,8 +42,8 @@ public class Order extends BaseEntity{
     private Integer discount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;

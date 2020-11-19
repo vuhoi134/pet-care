@@ -23,8 +23,8 @@ public class Output {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "output")
     private List<OutputDetail> outputDetails;

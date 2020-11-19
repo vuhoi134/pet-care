@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/cart-product")
@@ -22,8 +23,14 @@ public class CartProductControllerApi {
         return cartProductServices.addToCart(dto);
     }
 
-    @DeleteMapping("delete/{cartProductId}")
-    public BaseApiResult delete(@PathVariable long cartProductId) {
+    @GetMapping("/listCartProduct")
+    public ResponseEntity<?> list(@RequestParam(name = "guid") String guid,
+                                  @RequestParam(name = "userId") Long userId) {
+        return cartProductServices.getCart(guid,userId);
+    }
+
+    @DeleteMapping("delete")
+    public BaseApiResult delete(@RequestBody long[] cartProductId) {
         return cartProductServices.deleteCartProduct(cartProductId);
     }
 }

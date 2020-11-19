@@ -49,26 +49,8 @@ public class Profile extends BaseEntity {
     @Column(name = "image")
     private String image;
 
-    @OneToMany(mappedBy = "profile")
-    @JsonIgnore
-    private List<Input> input;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "profile")
-    @JsonManagedReference
-    private List<Output> output;
-
-    @OneToMany(mappedBy = "profile")
-    private List<Order> orders;
-
-    @OneToMany(mappedBy = "profile")
-    private List<Cart> carts;
-
-    @OneToMany(mappedBy = "profile")
-    private List<Transaction> transactions;
-
-    @OneToMany(mappedBy = "profile")
-    private List<Warehouse> warehouses;
-
-    @OneToMany(mappedBy = "profile")
-    private List<ServiceRequest> serviceRequests;
 }

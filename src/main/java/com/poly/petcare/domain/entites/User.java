@@ -1,5 +1,7 @@
 package com.poly.petcare.domain.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +28,29 @@ public class User {
     @Column(name = "password")
     private String passWord;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prolife_id")
+    @OneToOne(mappedBy = "user")
     private Profile profile;
 
+    @OneToMany(mappedBy = "user")
+    private List<Cart> carts;
+
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "user")
+    private List<Warehouse> warehouses;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Output> output;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Input> input;
+
+    @OneToMany(mappedBy = "user")
+    private List<ServiceRequest> serviceRequests;
 }

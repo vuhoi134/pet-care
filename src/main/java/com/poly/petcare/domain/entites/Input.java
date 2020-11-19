@@ -27,8 +27,8 @@ public class Input {
     private String phoneTransporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "input")
     private List<InputDetail> inputDetails;

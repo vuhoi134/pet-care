@@ -62,6 +62,9 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/v1/brand/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/category/**").permitAll()
                 .antMatchers("/v1/cart-product/**").permitAll()
+                .antMatchers("/v1/order/**").permitAll()
+                .antMatchers("/admin/input/**").hasAnyRole("ADMIN")
+                .antMatchers("/admin/output/**").hasAnyRole("MEMBER") // thử nghiệm phân quyền
                 .anyRequest().authenticated() // tất cả các request còn lại phải đc xác thực
                 .and()
                 .exceptionHandling()

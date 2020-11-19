@@ -30,6 +30,6 @@ public class Cart {
     private List<CartProduct> listCartProducts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

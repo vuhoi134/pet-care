@@ -20,6 +20,6 @@ public class ServiceRequest extends BaseEntity{
     private List<ServiceRequestDetail> serviceRequestDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prifile_id")
-    private Profile profile;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

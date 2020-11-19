@@ -16,6 +16,8 @@ import java.util.List;
 public class CartProductDTO {
     private Long id;
     private Long productId;
+    private Long userId;
+    private String codeTag;
     private Product product;
     private Integer amount;
     private BigDecimal price;
