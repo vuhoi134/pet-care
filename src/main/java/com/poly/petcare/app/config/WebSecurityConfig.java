@@ -57,14 +57,16 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/authenticate").permitAll() // Request dạng POST tới "/login" luôn được phép truy cập
+                .antMatchers(HttpMethod.POST,"/v1/login/authenticate").permitAll() // Request dạng POST tới "/login" luôn được phép truy cập
+                .antMatchers(HttpMethod.POST,"/v1/login/checkLogin").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/products/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/brand/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/category/**").permitAll()
                 .antMatchers("/v1/cart-product/**").permitAll()
                 .antMatchers("/v1/order/**").permitAll()
-                .antMatchers("/admin/input/**").hasAnyRole("ADMIN")
-                .antMatchers("/admin/output/**").hasAnyRole("MEMBER") // thử nghiệm phân quyền
+                .antMatchers("/sentmail/**").permitAll()
+                .antMatchers("/admin/input/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/admin/output/**").hasRole("MEMBER") // thử nghiệm phân quyền
                 .anyRequest().authenticated() // tất cả các request còn lại phải đc xác thực
                 .and()
                 .exceptionHandling()

@@ -1,8 +1,12 @@
 package com.poly.petcare.domain.utils;
 
+import com.poly.petcare.app.responses.jwt.LoginResponse;
+import com.poly.petcare.domain.entites.User;
+import com.poly.petcare.domain.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,9 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
     private String secret = "DATN_PETCARE"; // phần chữ ký trong mã Token
+
+    @Autowired
+    private UserRepository userRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -36,9 +43,11 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     } // kiểm tra ngày hết hạn, trả về thông báo đã hết hạn hay chưa
 
-    public String generateToken(String username) { //tạo 1 token dự trên tên người dùng
+    public LoginResponse generateToken(String username) { //tạo 1 token dự trên tên người dùng
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        User user=userRepository.findByUserName(username);
+        String token=createToken(claims, username);
+        return new LoginResponse(user.getId(),token);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

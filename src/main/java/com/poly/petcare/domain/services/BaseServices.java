@@ -56,4 +56,6 @@ public class BaseServices {
     protected OrderDetailRepository orderDetailRepository;
     @Autowired
     protected TransactionRepository transactionRepository;
+    @Autowired
+    protected MailSerivce mailSerivce;
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -83,6 +84,14 @@ public class OrderService extends BaseServices{
                 }
                 Cart cart = cartRepository.findByGuid(orderDTO.getGuid());
                 cartRepository.delete(cart);
+                User user=new User();
+                user.setUserName(orderDTO.getEmail());
+                user.setPassWord(String.valueOf(new Date().getTime()));
+                User user1=userRepository.save(user);
+                String text="Mã đơn hàng của quý khách là: "+order2.getCode();
+                String text2="Tài khoản: "+user1.getUserName()+"\n"+"Mật khẩu: "+user1.getPassWord();
+                mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",text);
+                mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin tài khoản",text2);
                 result.setMessage("Create Order Success!");
                 result.setSuccess(true);
                 return result;
@@ -126,6 +135,21 @@ public class OrderService extends BaseServices{
         DataApiResult result = new DataApiResult();
         if(guid != null && userId==0){
             Order order=orderRepository.findByGuid(guid);
+            List<OrderDetail> listOrderDetail=orderDetailRepository.findByOrder(order);
+            List<OrderDetailResponse> list=new ArrayList<>();
+            for (OrderDetail item:listOrderDetail) {
+                OrderDetailResponse orderDetailResponse=new OrderDetailResponse();
+                orderDetailResponse=orderDetailMapper.convertToDTO(item);
+                orderDetailResponse.setProductResponse(productMapper.convertToDTO(item.getProduct()));
+                list.add(orderDetailResponse);
+            }
+            result.setMessage("List OrderDetail!");
+            result.setSuccess(true);
+            result.setData(list);
+            return result;
+        }else if(userId>0){
+            User user=userRepository.getOne(userId);
+            Order order=orderRepository.findByUser(user);
             List<OrderDetail> listOrderDetail=orderDetailRepository.findByOrder(order);
             List<OrderDetailResponse> list=new ArrayList<>();
             for (OrderDetail item:listOrderDetail) {
