@@ -1,12 +1,19 @@
 package com.poly.petcare.domain.services;
 
+import com.poly.petcare.app.commom.ChangePasswordVM;
 import com.poly.petcare.app.dtos.ProfileDTO;
+import com.poly.petcare.app.dtos.UserDTO;
 import com.poly.petcare.app.responses.ProfileResponses;
 import com.poly.petcare.domain.entites.Profile;
+import com.poly.petcare.domain.entites.User;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.Objects;
 
 @Service
@@ -33,5 +40,18 @@ public class ProfileServices extends BaseServices {
         }
         ProfileResponses responses = modelMapper.profileResponses(profile);
         return ResponseEntity.ok(responses);
+    }
+
+    public ResponseEntity<?> changePassWord(ChangePasswordVM password,String userName) {
+//        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User userEntity = userRepository.findByUserName(userName);
+        if (passwordEncoder.matches(password.getCurrentPassword(), userEntity.getPassWord()) == true){
+            if (password.getNewPassword().equals(password.getConfirmPassword())){
+                userEntity.setPassWord(passwordEncoder.encode(password.getNewPassword()));
+                userRepository.saveAndFlush(userEntity);
+            }
+            return ResponseEntity.ok("Mật khẩu đã đổi thành công");
+        }return ResponseEntity.ok("Không thành công");
+
     }
 }

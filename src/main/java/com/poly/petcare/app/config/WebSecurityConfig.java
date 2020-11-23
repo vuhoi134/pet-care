@@ -35,14 +35,14 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
-        // return new BCryptPasswordEncoder();
-
-        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
-        return NoOpPasswordEncoder.getInstance();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
+//        // return new BCryptPasswordEncoder();
+//
+//        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override

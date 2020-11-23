@@ -85,6 +85,7 @@ public class CartProductServices extends BaseServices {
                 } else {
                     CartProduct cartProduct = new CartProduct();
                     cartProduct.setAmount(dto.getAmount());
+                    cartProduct.setProduct(productEntity);
                     cartProduct.setCart(cartEntity);
                     cartProduct.setProduct(productEntity);
                     cartProductRepository.save(cartProduct);
@@ -111,6 +112,7 @@ public class CartProductServices extends BaseServices {
                 productStoreRepository.saveAndFlush(productStore);
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
+                result.setTotalItem(dto.getAmount().longValue());
                 return result;
             }
         }
