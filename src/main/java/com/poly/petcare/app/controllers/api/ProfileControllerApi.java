@@ -1,5 +1,6 @@
 package com.poly.petcare.app.controllers.api;
 
+import com.poly.petcare.app.commom.ChangePasswordVM;
 import com.poly.petcare.app.dtos.ProfileDTO;
 import com.poly.petcare.domain.services.ProfileServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,10 @@ public class ProfileControllerApi {
     public ResponseEntity<?> edit(@Valid @RequestBody ProfileDTO profileDTO, @PathVariable Long profileID) {
         return profileServices.edit(profileDTO, profileID);
     }
-
+    @PostMapping(value ="changePassWord")
+    public ResponseEntity<?> changePassWord(@Valid @RequestBody ChangePasswordVM changePasswordVM,  @RequestParam(name = "userName") String userName){
+        return profileServices.changePassWord(changePasswordVM,userName);
+    }
     @GetMapping("info/{profileID}")
     public ResponseEntity<?> info(@PathVariable Long profileID) {
         return profileServices.info(profileID);

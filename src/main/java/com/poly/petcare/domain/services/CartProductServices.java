@@ -38,11 +38,13 @@ public class CartProductServices extends BaseServices {
                 } else {
                     CartProduct cartProduct = new CartProduct();
                     cartProduct.setAmount(dto.getAmount());
+                    cartProduct.setProduct(productEntity);
                     cartProduct.setCart(cartEntity);
                     cartProductRepository.save(cartProduct);
                 }
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
+                result.setTotalItem(dto.getAmount().longValue());
                 return result;
             }
         }
