@@ -16,6 +16,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     Cart findFirstCartByGuid(@Param("guid") String guid);
 
     Cart findByGuid(String guid);
-    Cart findByGuidAndUser(String guid, User user);
+    Cart findByUser(User user);
 
 }

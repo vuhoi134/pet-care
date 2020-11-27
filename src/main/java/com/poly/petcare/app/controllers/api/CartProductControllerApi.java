@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/cart-product")
-@CrossOrigin
 public class CartProductControllerApi {
     @Autowired
     private CartProductServices cartProductServices;

@@ -98,7 +98,7 @@ public class CartProductServices extends BaseServices {
             if(cartEntity == null && productEntity != null){
                 Cart cartE=new Cart();
                 cartE.setGuid(dto.getGuid());
-                if(dto.getUserId()!=null){
+                if(dto.getUserId()>0){
                     cartE.setUser(userRepository.getOne(dto.getUserId()));
                 }
                 Cart cartE2=cartRepository.save(cartE);
@@ -122,12 +122,13 @@ public class CartProductServices extends BaseServices {
     public ResponseEntity<?> getCart(String guid,long userId){
         DataApiResult result = new DataApiResult();
         if(guid!=null && userId >0){
-            Cart cartEntity=cartRepository.findByGuidAndUser(guid,userRepository.getOne(userId));
+            Cart cartEntity=cartRepository.findByUser(userRepository.getOne(userId));
             List<CartProduct> cartProductList=cartProductRepository.findAllByCart(cartEntity);
             List<CartProductResponse> list=new ArrayList<>();
             for (CartProduct item:cartProductList) {
                 CartProductResponse c=cartProductMapper.convertToDTO(item);
                 c.setProductResponse(productMapper.convertToDTO(item.getProduct()));
+                c.setTotalMoney(Long.valueOf(item.getAmount()*item.getProduct().getPrice().intValue()));
                 list.add(c);
             }
             result.setSuccess(true);
@@ -140,13 +141,16 @@ public class CartProductServices extends BaseServices {
             Cart cartEntity=cartRepository.findByGuid(guid);
             List<CartProduct> cartProductList=cartProductRepository.findAllByCart(cartEntity);
             List<CartProductResponse> list=new ArrayList<>();
+            Long totalMoney=0L;
             for (CartProduct item:cartProductList) {
                 CartProductResponse c=cartProductMapper.convertToDTO(item);
                 c.setProductResponse(productMapper.convertToDTO(item.getProduct()));
+                totalMoney+=(Long.valueOf(item.getAmount()*item.getProduct().getPrice().intValue()));
                 list.add(c);
             }
             result.setSuccess(true);
             result.setMessage("List cart product");
+            result.setTotalMoney(totalMoney);
             result.setData(list);
             result.setTotalItem(Long.valueOf(list.size()));
             return ResponseEntity.ok(result);

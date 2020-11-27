@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/v1/login")
-@CrossOrigin
 public class LoginControllerApi {
     @Autowired
     private JwtUtil jwtUtil;

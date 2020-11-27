@@ -13,4 +13,5 @@ public class BaseApiResult {
     private boolean isSuccess;
     private String message;
     private Long totalItem;
+    private Long totalMoney;
 }

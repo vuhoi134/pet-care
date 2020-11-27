@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/order")
-@CrossOrigin
 public class OrderControllerApi {
 
     @Autowired
@@ -22,9 +22,20 @@ public class OrderControllerApi {
         return orderService.createOrder(orderDTO);
     }
 
+    @PostMapping("createOrderStore")
+    public BaseApiResult createOrderStore(@Valid @RequestBody OrderDTO orderDTO){
+        return orderService.createOrderStore(orderDTO);
+    }
+
     @GetMapping("listOrder")
     public DataApiResult listOrderDetail(@RequestParam(name = "guid") String guid,
                                          @RequestParam(name = "userId") Long userId){
         return orderService.getListOrder(guid, userId);
+    }
+
+    @GetMapping("allListOrder")
+    public DataApiResult allListOrder(@RequestParam(name = "page") Optional<Integer> page,
+                                      @RequestParam(name = "limit") Optional<Integer> limit){
+        return orderService.getAllListOrder(page.orElse(0),limit.orElse(0));
     }
 }

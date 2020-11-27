@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/products")
-@CrossOrigin
 public class ProductControllerApi {
 
     @Autowired

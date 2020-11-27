@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/admin/input")
-@CrossOrigin
 public class InputControllerApi {
 
     @GetMapping("authen")

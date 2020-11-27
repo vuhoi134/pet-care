@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/v1/category")
-@CrossOrigin
 public class CategoryControllerApi {
     @Autowired
     private CategoryServices categoryService;
