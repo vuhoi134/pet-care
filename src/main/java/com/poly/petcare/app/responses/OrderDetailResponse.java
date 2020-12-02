@@ -17,6 +17,7 @@ public class OrderDetailResponse {
 //    private String orderAddress;
 //    private BigDecimal orderTotalMoney;
 //    private Integer orderDiscount;
+    private Long id;
     private Integer quantity;
     private ProductResponse productResponse;
 }

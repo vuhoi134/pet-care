@@ -1,6 +1,10 @@
 package com.poly.petcare.app.controllers.api;
 
 import com.poly.petcare.app.dtos.ProductDTO;
+import com.poly.petcare.app.responses.ProductResponse;
+import com.poly.petcare.app.responses.ProductSearchResponse;
+import com.poly.petcare.app.result.DataApiResult;
+import com.poly.petcare.domain.entites.Product;
 import com.poly.petcare.domain.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -73,6 +78,12 @@ public class ProductControllerApi {
                                                     @RequestParam(name = "categoryId") Long categoryId,
                                                     @RequestParam(name = "brandId") Long brandId){
         return productService.findByPriceAndCategory(page.orElse(0),limit.orElse(0),price1,price2,categoryId,brandId);
+    }
+
+    @GetMapping(value = "/admin-search")
+    public List<ProductSearchResponse> adminSearch(
+                            @RequestParam("productName") String productName) {
+        return productService.searchByNameAdmin(productName);
     }
 
 }

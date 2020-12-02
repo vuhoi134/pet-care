@@ -4,6 +4,7 @@ import com.poly.petcare.app.dtos.OrderDTO;
 import com.poly.petcare.app.result.BaseApiResult;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.services.OrderService;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,31 @@ public class OrderControllerApi {
 
     @GetMapping("allListOrder")
     public DataApiResult allListOrder(@RequestParam(name = "page") Optional<Integer> page,
-                                      @RequestParam(name = "limit") Optional<Integer> limit){
-        return orderService.getAllListOrder(page.orElse(0),limit.orElse(0));
+                                      @RequestParam(name = "limit") Optional<Integer> limit,
+                                      @RequestParam(name = "status") Optional<Integer> status){
+        return orderService.getAllListOrder(page.orElse(0),limit.orElse(0),status.orElse(0));
+    }
+
+    @GetMapping("orderDetail/{orderId}")
+    public DataApiResult orderDetail(@PathVariable Long orderId){
+        return orderService.orderDetail(orderId);
+    }
+
+    @PutMapping("updateOrderStore/{orderId}")
+    public BaseApiResult updateOrderStore(@PathVariable Long orderId,
+            @Valid @RequestBody OrderDTO orderDTO){
+        return orderService.updateOrderStore(orderId,orderDTO);
+    }
+
+    @PutMapping("updateOrderDetail")
+    public BaseApiResult updateOrderDetail(@RequestParam(name = "orderDetailId") Long orderDetailId,
+                                           @RequestParam(name = "quantity") Integer quantity){
+        return orderService.updateODD(orderDetailId,quantity);
+    }
+
+    @PutMapping("updateStatusOrder")
+    public BaseApiResult updateStatusOrder(@RequestParam(name = "orderId") Long orderId,
+                                           @RequestParam(name = "status") Integer status){
+        return orderService.updateStatusODD(orderId,status);
     }
 }

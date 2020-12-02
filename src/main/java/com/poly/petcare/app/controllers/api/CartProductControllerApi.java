@@ -32,4 +32,9 @@ public class CartProductControllerApi {
     public BaseApiResult delete(@RequestBody long[] cartProductId) {
         return cartProductServices.deleteCartProduct(cartProductId);
     }
+    @PutMapping("update")
+    public BaseApiResult update(@RequestParam(name = "cartProductId") Long cartProductId,
+                                @RequestParam(name = "amount") Integer amount) {
+        return cartProductServices.updateCart(cartProductId,amount);
+    }
 }

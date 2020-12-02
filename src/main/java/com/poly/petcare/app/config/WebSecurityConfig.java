@@ -60,6 +60,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/v1/login/authenticate").permitAll() // Request dạng POST tới "/login" luôn được phép truy cập
+                .antMatchers(HttpMethod.POST,"/v1/login/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/products/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/brand/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/category/**").permitAll()

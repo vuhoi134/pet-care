@@ -4,11 +4,12 @@ import com.poly.petcare.domain.entites.Order;
 import com.poly.petcare.domain.entites.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order,Long> {
+public interface OrderRepository extends JpaRepository<Order,Long>, JpaSpecificationExecutor<Order> {
     Order findByGuid(String guid);
 
     List<Order> findByUser(User user, Sort sort);

@@ -3,6 +3,7 @@ package com.poly.petcare.domain.services;
 import com.poly.petcare.app.dtos.ProductDTO;
 import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
 import com.poly.petcare.app.responses.ProductResponse;
+import com.poly.petcare.app.responses.ProductSearchResponse;
 import com.poly.petcare.app.responses.ProductStoreResponse;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
@@ -13,6 +14,7 @@ import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
 import com.poly.petcare.domain.repository.ProductRepository;
 import com.poly.petcare.domain.specification.CategorySpecification;
+import com.poly.petcare.domain.specification.ProductSpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.apache.logging.log4j.LogManager;
@@ -187,6 +189,17 @@ public class ProductService extends BaseServices {
         Specification conditions = Specification.where(ProductStoreSpecification.hasProduct("name", content, ":"));
         listProduct(conditions,pageable);
         return listProduct(conditions,pageable);
+    }
+    public List<ProductSearchResponse> searchByNameAdmin(String productName) {
+        List<ProductSearchResponse> list=new ArrayList<>();
+        List<Product> productList=productRepository.findByName(productName);
+        for (Product p:productList) {
+            ProductSearchResponse productSearchResponse=new ProductSearchResponse();
+            productSearchResponse.setId(p.getId());
+            productSearchResponse.setName(p.getName());
+            list.add(productSearchResponse);
+        }
+        return list;
     }
 
     public ResponseEntity<?> searchByDesc(int page, int limit, String content) {
