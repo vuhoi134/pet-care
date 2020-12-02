@@ -27,4 +27,9 @@ public class ProfileControllerApi {
     public ResponseEntity<?> info(@PathVariable Long profileID) {
         return profileServices.info(profileID);
     }
+
+    @GetMapping("infoByUser/{userId}")
+    public ResponseEntity<?> infoByUser(@PathVariable Long userId) {
+        return profileServices.infoByUser(userId);
+    }
 }

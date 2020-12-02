@@ -55,11 +55,13 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf()
                 .disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/v1/login/authenticate").permitAll() // Request dạng POST tới "/login" luôn được phép truy cập
-                .antMatchers(HttpMethod.POST,"/v1/login/checkLogin").permitAll()
+                .antMatchers(HttpMethod.POST,"/v1/login/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/products/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/brand/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/category/**").permitAll()
@@ -69,9 +71,9 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1/wearhouse/**").permitAll()
                 .antMatchers("/v1/cart-product/**").permitAll()
                 .antMatchers("/v1/order/**").permitAll()
-                .antMatchers("/sentmail/**").permitAll()
+                .antMatchers("/v1/profile/**").permitAll()
                 .antMatchers("/admin/input/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/admin/output/**").hasRole("MEMBER") // thử nghiệm phân quyền
+                .antMatchers("/admin/output/**").hasRole("ADMIN")
                 .anyRequest().authenticated() // tất cả các request còn lại phải đc xác thực
                 .and()
                 .exceptionHandling()

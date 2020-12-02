@@ -7,6 +7,9 @@ import com.poly.petcare.app.responses.ProfileResponses;
 import com.poly.petcare.domain.entites.Profile;
 import com.poly.petcare.domain.entites.User;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
+import com.poly.petcare.domain.specification.ProductStoreSpecification;
+import com.poly.petcare.domain.specification.ProfileSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ProfileServices extends BaseServices {
@@ -39,6 +43,16 @@ public class ProfileServices extends BaseServices {
             throw new ResourceNotFoundException("Not found profileID" + " " + profileID);
         }
         ProfileResponses responses = modelMapper.profileResponses(profile);
+        return ResponseEntity.ok(responses);
+    }
+
+    public ResponseEntity<?> infoByUser(Long userID) {
+        Specification conditions = Specification.where(ProfileSpecification.hasProfile(userID));
+        Optional<Profile> profile = profileRepository.findOne(conditions);
+        if (Objects.isNull(profile)) {
+            throw new ResourceNotFoundException("Not found profileID" + " " + userID);
+        }
+        ProfileResponses responses = modelMapper.profileResponses(profile.get());
         return ResponseEntity.ok(responses);
     }
 

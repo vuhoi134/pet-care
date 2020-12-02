@@ -1,7 +1,7 @@
-package com.poly.petcare.app.dtos;
+package com.poly.petcare.app.responses;
 
+import com.poly.petcare.domain.entites.OrderDetail;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,18 +11,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderDTO {
-    private Long userId;
-    private Long[] transactionId;
-    private String guid;
+public class OrderResponse {
+    private Long id;
+    private String code;
     private String userName;
     private String email;
     private String phoneNumber;
     private String address;
-    private String city;
     private BigDecimal totalMoney;
-    private Integer discount;
     private Integer status;
-    private List<OrderDetailDTO> orderDetailDTOS;
+    private Integer discount;
+    private List<OrderDetailResponse> orderDetailResponses;
 }

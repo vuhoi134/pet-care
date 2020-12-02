@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/cart-product")
-@CrossOrigin
 public class CartProductControllerApi {
     @Autowired
     private CartProductServices cartProductServices;
@@ -32,5 +31,10 @@ public class CartProductControllerApi {
     @DeleteMapping("delete")
     public BaseApiResult delete(@RequestBody long[] cartProductId) {
         return cartProductServices.deleteCartProduct(cartProductId);
+    }
+    @PutMapping("update")
+    public BaseApiResult update(@RequestParam(name = "cartProductId") Long cartProductId,
+                                @RequestParam(name = "amount") Integer amount) {
+        return cartProductServices.updateCart(cartProductId,amount);
     }
 }

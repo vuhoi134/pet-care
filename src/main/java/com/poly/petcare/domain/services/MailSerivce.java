@@ -11,17 +11,21 @@ public class MailSerivce {
     @Autowired
     public JavaMailSender emailSender;
 
-    public String sendSimpleEmail(String email,String subject,String text) {
-        // Create a Simple MailMessage.
-        SimpleMailMessage message = new SimpleMailMessage();
+    public Boolean sendSimpleEmail(String email,String subject,String text) {
+        try {
+            // Create a Simple MailMessage.
+            SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(text);
+            message.setTo(email);
+            message.setSubject(subject);
+            message.setText(text);
 
-        // Send Message!
-        this.emailSender.send(message);
+            // Send Message!
+            this.emailSender.send(message);
 
-        return "Email Sent!";
+            return true;
+        }catch(Exception e){
+            return true;
+        }
     }
 }
