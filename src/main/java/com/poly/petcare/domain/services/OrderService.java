@@ -78,7 +78,7 @@ public class OrderService extends BaseServices{
                 }
                 User user=new User();
                 user.setUserName(orderDTO.getEmail());
-                user.setPassWord(String.valueOf(new Date().getTime()));
+                user.setPassWord(passwordEncoder.encode(String.valueOf(new Date().getTime())));
                 User user1=userRepository.save(user);
                 Order order1=new Order();
                 order1.setGuid(orderDTO.getGuid());
