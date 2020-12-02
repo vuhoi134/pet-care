@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -35,14 +36,14 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService);
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
-//        // return new BCryptPasswordEncoder();
-//
-//        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
+         return new BCryptPasswordEncoder();
+
+        // Password encoder, để Spring Security sử dụng mã hóa mật khẩu người dùng
 //        return NoOpPasswordEncoder.getInstance();
-//    }
+    }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -62,6 +63,10 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/v1/products/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/brand/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1/category/**").permitAll()
+                .antMatchers("/v1/user/**").permitAll()
+                .antMatchers("/v1/profile/**").permitAll()
+                .antMatchers("/v1/supplier/**").permitAll()
+                .antMatchers("/v1/wearhouse/**").permitAll()
                 .antMatchers("/v1/cart-product/**").permitAll()
                 .antMatchers("/v1/order/**").permitAll()
                 .antMatchers("/sentmail/**").permitAll()

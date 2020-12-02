@@ -30,12 +30,15 @@ public class User {
     @Column(name = "password")
     private String passWord;
 
+    @Column(name = "status")
+    private String status;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dbo_user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     private Profile profile;
 
     @OneToMany(mappedBy = "user")

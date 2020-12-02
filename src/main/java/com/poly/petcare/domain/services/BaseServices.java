@@ -51,6 +51,8 @@ public class BaseServices {
         return null;
     }
     @Autowired
+    protected SupplierRepository supplierRepository;
+    @Autowired
     protected OrderRepository orderRepository;
     @Autowired
     protected OrderDetailRepository orderDetailRepository;
@@ -58,4 +60,6 @@ public class BaseServices {
     protected TransactionRepository transactionRepository;
     @Autowired
     protected MailSerivce mailSerivce;
+    @Autowired
+    protected WearHouseRepository wearHouseRepository;
 }

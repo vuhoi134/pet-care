@@ -21,7 +21,14 @@ public class UserControllerApi {
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
         return userServices.create(userDTO);
     }
+    @PostMapping(value = "delete/{userID}")
+    public ResponseEntity<?> delete(@PathVariable Long userID){
+        return userServices.delete(userID);
+    }
 
-
+    @PutMapping(value = "edit/{userID}")
+    public ResponseEntity<?> edit(@PathVariable Long userID){
+        return userServices.edit(userID);
+    }
 
 }

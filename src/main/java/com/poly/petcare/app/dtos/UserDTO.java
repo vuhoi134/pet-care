@@ -17,9 +17,11 @@ public class UserDTO {
     @NotBlank(message = "Cannot to blank field userName")
     @Size(min = 3, max = 20)
     private String userName;
+
     @NotBlank(message = "Cannot to blank field passWord")
     @Size(min = 3, max = 20)
     private String passWord;
     private Long profileID;
     private Long roleID;
+    private String status;
 }

@@ -19,7 +19,7 @@ public class Transaction extends BaseEntity{
     private String name;
 
     @Column(name = "status")
-    private Integer status;
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

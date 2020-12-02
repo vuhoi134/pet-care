@@ -1,6 +1,7 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.contant.RoleIdConstant;
+import com.poly.petcare.app.contant.StatesConstant;
 import com.poly.petcare.app.dtos.ProfileDTO;
 import com.poly.petcare.app.dtos.UserDTO;
 import com.poly.petcare.app.responses.UserResponses;
@@ -22,26 +23,45 @@ import java.util.Objects;
 public class UserServices extends BaseServices {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> create(UserDTO dto) {
-        Profile profile = new Profile();
+
         User user = new User();
         user.setUserName(dto.getUserName());
+
         if (userRepository.existsByUserName(dto.getUserName())) {
             throw new ResourceNotFoundException("This username already exists");
         }
+        user.setStatus(StatesConstant.ACTIVE);
         user.setPassWord(passwordEncoder.encode(dto.getPassWord()));
-        user.setProfile(profile);
         userRepository.save(user);
 
-//        UserRole userRole = UserRole.builder()
-//                .userId(user.getId())
-//                .roleId(RoleIdConstant.Role_User)
-//                .build();
-//        userRoleRepository.save(userRole);
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profileRepository.save(profile);
 
         UserRole userRole = new UserRole();
         userRole.setUserId(user.getId());
-        userRole.setRoleId(RoleIdConstant.Role_User);
+        userRole.setRoleId(1L);
         userRoleRepository.save(userRole);
         return ResponseEntity.ok(true);
     }
+
+    public ResponseEntity<?> edit(Long userID){
+        User user = userRepository.findById(userID).orElse(null);
+        if (Objects.isNull(user)){
+            throw new ResourceNotFoundException("Not Found");
+        }
+        user.setStatus(StatesConstant.NOTACTIVE);
+        userRepository.saveAndFlush(user);
+        return ResponseEntity.ok(true);
+    }
+
+    public ResponseEntity<?> delete(Long userID) {
+        User user = userRepository.findById(userID).orElse(null);
+        if (Objects.isNull(user)) {
+            throw new ResourceNotFoundException("Not found");
+        }
+        userRepository.delete(user);
+        return ResponseEntity.ok(true);
+    }
+
 }
