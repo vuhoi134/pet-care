@@ -335,7 +335,7 @@ public class OrderService extends BaseServices{
         BaseApiResult result = new BaseApiResult();
         Order order=orderRepository.getOne(orderId);
 
-        // xóa giỏ hàng chi tiết cũ
+        // xóa đơn hàng chi tiết cũ
         for (OrderDetail o:order.getOrderDetails()) {
             orderDetailRepository.delete(o);
         }
@@ -357,7 +357,7 @@ public class OrderService extends BaseServices{
         order1.setStatus(orderDTO.getStatus());
         Order order2=orderRepository.saveAndFlush(order1);
 
-        // tạo giỏ hàng chi tiết mới
+        // tạo đơn hàng chi tiết mới
         for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
             OrderDetail orderDetail=new OrderDetail();
             orderDetail.setOrder(order2);
