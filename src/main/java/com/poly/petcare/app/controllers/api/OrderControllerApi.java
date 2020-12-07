@@ -37,8 +37,9 @@ public class OrderControllerApi {
     @GetMapping("allListOrder")
     public DataApiResult allListOrder(@RequestParam(name = "page") Optional<Integer> page,
                                       @RequestParam(name = "limit") Optional<Integer> limit,
-                                      @RequestParam(name = "status") Optional<Integer> status){
-        return orderService.getAllListOrder(page.orElse(0),limit.orElse(0),status.orElse(0));
+                                      @RequestParam(name = "status") Optional<Integer> status,
+                                      @RequestParam(name = "phoneNumber") String phoneNumber){
+        return orderService.getAllListOrder(page.orElse(0),limit.orElse(0),status.orElse(0),phoneNumber);
     }
 
     @GetMapping("orderDetail/{orderId}")

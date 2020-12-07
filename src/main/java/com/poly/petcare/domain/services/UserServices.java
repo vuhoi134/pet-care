@@ -40,7 +40,7 @@ public class UserServices extends BaseServices {
 
         UserRole userRole = new UserRole();
         userRole.setUserId(user.getId());
-        userRole.setRoleId(1L);
+        userRole.setRoleId(2L);
         userRoleRepository.save(userRole);
         return ResponseEntity.ok(true);
     }

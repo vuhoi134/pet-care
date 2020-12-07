@@ -108,6 +108,8 @@ public class ProductService extends BaseServices {
                 .descriptionLong(dto.getDescriptionLong())
                 .category(category)
                 .brand(brand)
+                .price(dto.getPrice())
+                .status(true)
                 .unit(dto.getUnit())
                 .categoryAttributeValues(categoryAttributeValues)
                 .build();

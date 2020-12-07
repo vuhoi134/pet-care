@@ -78,7 +78,7 @@ public class OrderService extends BaseServices{
                 }
                 User user=new User();
                 user.setUserName(orderDTO.getEmail());
-                user.setPassWord(passwordEncoder.encode(String.valueOf(new Date().getTime())));
+                user.setPassWord(String.valueOf(new Date().getTime()));
                 User user1=userRepository.save(user);
                 Order order1=new Order();
                 order1.setGuid(orderDTO.getGuid());
@@ -103,7 +103,9 @@ public class OrderService extends BaseServices{
                     orderDetailRepository.save(orderDetail);
                     orderDetailList.add(orderDetail);
                 }
-
+                Profile profile=new Profile();
+                profile.setUser(user1);
+                profileRepository.save(profile);
                 // xóa giỏ hàng
                 Cart cart = cartRepository.findByGuid(orderDTO.getGuid());
                 cartRepository.delete(cart);
@@ -154,11 +156,12 @@ public class OrderService extends BaseServices{
                 orderDetailRepository.save(orderDetail);
                 orderDetailList.add(orderDetail);
             }
-            // xóa giỏ hàng
-            Sort sort = Sort.by("id").descending();
-            List<Cart> cart = cartRepository.findAllByUser(user,sort);
-            for (Cart c:cart) {
-                cartRepository.delete(c);
+            // xóa giỏ hàng chi tiết
+//            Sort sort = Sort.by("id").descending();
+            Cart cart = cartRepository.findByUser(user);
+            List<CartProduct> cartProductList=cartProductRepository.findAllByCart(cart);
+            for (CartProduct cp:cartProductList) {
+                cartProductRepository.delete(cp);
             }
 
             // sent mail đơn hàng
@@ -277,11 +280,11 @@ public class OrderService extends BaseServices{
                 return result;
     }
 
-    public DataApiResult getAllListOrder(Integer page,Integer limit,Integer status){
+    public DataApiResult getAllListOrder(Integer page,Integer limit,Integer status,String phoneNumber){
         DataApiResult result = new DataApiResult();
         Sort sort = Sort.by("id").descending();
         Pageable pageable = PageRequest.of(page, limit,sort);
-        if (status==0){
+        if (status==0 && phoneNumber.length()==0){
             Page<Order> listOrder=orderRepository.findAll(pageable);
             List<OrderResponse> list=new ArrayList<>();
             for (Order item:listOrder) {
@@ -294,13 +297,13 @@ public class OrderService extends BaseServices{
             result.setTotalItem(listOrder.getTotalElements());
             result.setData(list);
             return result;
-        }
-        Specification conditions=Specification.where(OrderSpecification.hasOrderByStatus(status));
-            Page<Order> listOrder=orderRepository.findAll(conditions,pageable);
-            List<OrderResponse> list=new ArrayList<>();
-            for (Order item:listOrder) {
-                OrderResponse orderResponse=new OrderResponse();
-                orderResponse=orderMapper.convertToDTO(item);
+        }else if(status>0 && phoneNumber.length()==0) {
+            Specification conditions = Specification.where(OrderSpecification.hasOrderByStatus(status));
+            Page<Order> listOrder = orderRepository.findAll(conditions, pageable);
+            List<OrderResponse> list = new ArrayList<>();
+            for (Order item : listOrder) {
+                OrderResponse orderResponse = new OrderResponse();
+                orderResponse = orderMapper.convertToDTO(item);
                 list.add(orderResponse);
             }
             result.setMessage("List Order!");
@@ -308,6 +311,40 @@ public class OrderService extends BaseServices{
             result.setTotalItem(listOrder.getTotalElements());
             result.setData(list);
             return result;
+        }else if(status==0 && phoneNumber.length()>0 ) {
+            Specification conditions = Specification.where(OrderSpecification.hasOrderByPhone(phoneNumber));
+            Page<Order> listOrder = orderRepository.findAll(conditions, pageable);
+            List<OrderResponse> list = new ArrayList<>();
+            for (Order item : listOrder) {
+                OrderResponse orderResponse = new OrderResponse();
+                orderResponse = orderMapper.convertToDTO(item);
+                list.add(orderResponse);
+            }
+            result.setMessage("List Order!");
+            result.setSuccess(true);
+            result.setTotalItem(listOrder.getTotalElements());
+            result.setData(list);
+            return result;
+        }else if(status>0 && phoneNumber.length()>0 ) {
+            Specification conditions = Specification.where(OrderSpecification.hasOrderByStatus(status).and(
+                    OrderSpecification.hasOrderByPhone(phoneNumber)));
+            Page<Order> listOrder = orderRepository.findAll(conditions, pageable);
+            List<OrderResponse> list = new ArrayList<>();
+            for (Order item : listOrder) {
+                OrderResponse orderResponse = new OrderResponse();
+                orderResponse = orderMapper.convertToDTO(item);
+                list.add(orderResponse);
+            }
+            result.setMessage("List Order!");
+            result.setSuccess(true);
+            result.setTotalItem(listOrder.getTotalElements());
+            result.setData(list);
+            return result;
+        }else {
+            result.setMessage("Not List Order!");
+            result.setSuccess(false);
+            return result;
+        }
     }
 
     public DataApiResult orderDetail(Long orderId){

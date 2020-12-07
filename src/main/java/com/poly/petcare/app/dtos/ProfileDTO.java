@@ -30,13 +30,12 @@ public class ProfileDTO {
     private String email;
 
     @NotBlank
-    @Size(min = 5, max = 50)
+//    @Size(min = 5, max = 5000)
     private String address;
 
     private Date birthDay;
-    @NotBlank
 
-    private String images;
-    @NotBlank
+    private String image;
+
     private String gender;
 }

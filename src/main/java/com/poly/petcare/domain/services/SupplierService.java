@@ -1,15 +1,22 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.SupplierDTO;
+import com.poly.petcare.app.responses.SupplierResponse;
 import com.poly.petcare.domain.entites.Supplier;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
+import com.poly.petcare.domain.mapper.SupplierMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
 public class SupplierService extends BaseServices{
+    @Autowired
+    private SupplierMapper supplierMapper;
     public ResponseEntity<?> create(SupplierDTO dto){
         Supplier supplier = new Supplier();
         supplier.setCode(dto.getCode());
@@ -40,5 +47,15 @@ public class SupplierService extends BaseServices{
         supplier.setAddress(dto.getAddress());
         supplierRepository.saveAndFlush(supplier);
         return ResponseEntity.ok(true);
+    }
+
+    public List<SupplierResponse> listSupplier(){
+        List<Supplier> supplierList=supplierRepository.findAll();
+        List<SupplierResponse> responseList=new ArrayList<>();
+        for (Supplier item:supplierList) {
+            SupplierResponse supplierResponse=supplierMapper.convertToDTO(item);
+            responseList.add(supplierResponse);
+        }
+        return responseList;
     }
 }

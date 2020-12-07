@@ -10,6 +10,15 @@ public class ProfileSpecification {
      * @return
      */
     public static Specification<Profile> hasProfile(Long userId){
-            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("user").get("id"), userId);
+            return (root, query, cb) -> cb.equal(root.get("user").get("id"), userId);
+    }
+
+    /**
+     * Lấy ra thông tin profile theo userRole
+     * @param userId
+     * @return
+     */
+    public static Specification<Profile> hasListProfile(Long userId){
+        return (root, query, cb) -> cb.equal(root.get("user").get("roles"), userId);
     }
 }

@@ -12,6 +12,6 @@ public class ProductSpecification {
      * @return
      */
     public static Specification<Product> hasProductName(String productName) {
-        return (root, query, cb) -> cb.like(root.get("name"), productName);
+        return (root, query, cb) -> cb.like(root.get("name"), "%"+productName+"%");
     }
 }

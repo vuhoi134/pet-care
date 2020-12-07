@@ -36,7 +36,7 @@ public class CartProductServices extends BaseServices {
     public BaseApiResult addToCart(CartProductDTO dto) {
         BaseApiResult result = new BaseApiResult();
         ProductStore productStore = productStoreRepository.getOne(dto.getProductId());
-        if (dto.getGuid() != null && dto.getProductId() > 0) { // khách hàng vãng lai
+        if (dto.getGuid() != null && dto.getProductId() > 0 && dto.getUserId()==0) { // khách hàng vãng lai
             Cart cartEntity = cartRepository.findByGuid(dto.getGuid());
             Product productEntity = productRepository.getOne(dto.getProductId());
             if (dto.getAmount() > productStore.getQuantityStore()){
@@ -84,6 +84,36 @@ public class CartProductServices extends BaseServices {
                 return result;
             }
         }
+        if(dto.getUserId()>0 && dto.getProductId() > 0){ // khách hàng có tài khoản
+            Cart cartEntity = cartRepository.findByUser(userRepository.getOne(dto.getUserId()));
+            Product productEntity = productRepository.getOne(dto.getProductId());
+            if (dto.getAmount() > productStore.getQuantityStore()){
+                throw new ResourceNotFoundException("Quantity must not be exceeded");
+            }
+
+            if (cartEntity != null && productEntity != null) {
+                CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cartEntity.getId(), productEntity.getId());
+                if (cartProductEntity != null) {
+                    System.out.println("Có vào");
+                    cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
+                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    cartProductRepository.saveAndFlush(cartProductEntity);
+                    productStoreRepository.saveAndFlush(productStore);
+                } else {
+                    CartProduct cartProduct = new CartProduct();
+                    cartProduct.setAmount(dto.getAmount());
+                    cartProduct.setProduct(productEntity);
+                    cartProduct.setCart(cartEntity);
+                    cartProduct.setProduct(productEntity);
+                    cartProductRepository.save(cartProduct);
+                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    productStoreRepository.saveAndFlush(productStore);
+                }
+                result.setMessage("Add to cart successfully!");
+                result.setSuccess(true);
+                return result;
+            }
+        }
         result.setMessage("Fail!");
         result.setSuccess(false);
         return result;
@@ -94,6 +124,7 @@ public class CartProductServices extends BaseServices {
         Sort sort = Sort.by("id").descending();
         int totalItem=0;
         if(guid!=null && userId >0){
+            Long totalMoney=0L;
             List<Cart> cartEntity=cartRepository.findAllByUser(userRepository.getOne(userId),sort);
             List<CartResponse> cartResponseList=new ArrayList<>();
             for (Cart c:cartEntity) {
@@ -108,6 +139,7 @@ public class CartProductServices extends BaseServices {
                     CartProductResponse cartProductResponse = cartProductMapper.convertToDTO(c);
                     cartProductResponse.setProductResponse(productMapper.convertToDTO(c.getProduct()));
                     cartProductResponse.setTotalMoney(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
+                    totalMoney+=(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
                     list.add(cartProductResponse);
                 }
             }
@@ -115,6 +147,7 @@ public class CartProductServices extends BaseServices {
             result.setMessage("List cart product");
             result.setData(list);
             result.setTotalItem(Long.valueOf(totalItem));
+            result.setTotalMoney(totalMoney);
             return ResponseEntity.ok(result);
 //            Cart cartEntity=cartRepository.findByUser(userRepository.getOne(userId));
 //            List<CartProduct> cartProductList=cartProductRepository.findAllByCart(cartEntity);

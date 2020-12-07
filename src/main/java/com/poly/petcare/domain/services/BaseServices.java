@@ -62,4 +62,6 @@ public class BaseServices {
     protected MailSerivce mailSerivce;
     @Autowired
     protected WearHouseRepository wearHouseRepository;
+    @Autowired
+    protected InputDetailRepository inputDetailRepository;
 }

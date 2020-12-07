@@ -12,6 +12,7 @@ import java.util.Date;
 @Data
 @Builder
 public class ProfileResponses {
+    private Long id;
     private String fullName;
     private String phoneNumber;
     private String email;
