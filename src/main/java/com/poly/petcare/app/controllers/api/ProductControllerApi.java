@@ -86,4 +86,9 @@ public class ProductControllerApi {
         return productService.searchByNameAdmin(productName);
     }
 
+    @GetMapping(value = "/allProduct")
+    public DataApiResult allProduct(@RequestParam(name = "page") Optional<Integer> page,
+                                            @RequestParam(name = "limit") Optional<Integer> limit) {
+        return productService.listProductAdmin(page.orElse(0),limit.orElse(0));
+    }
 }

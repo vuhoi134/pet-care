@@ -5,11 +5,16 @@ import com.poly.petcare.app.contant.StatesConstant;
 import com.poly.petcare.app.dtos.ProfileDTO;
 import com.poly.petcare.app.dtos.UserDTO;
 import com.poly.petcare.app.responses.ProfileResponses;
+import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.Profile;
 import com.poly.petcare.domain.entites.User;
+import com.poly.petcare.domain.entites.UserRole;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
 import com.poly.petcare.domain.specification.ProfileSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -85,12 +90,14 @@ public class ProfileServices extends BaseServices {
         }return ResponseEntity.ok("Không thành công");
 
     }
-    public List<ProfileResponses> listProfile(boolean status){
-        List<User> list =new ArrayList<>(0);
+    public DataApiResult listProfile(boolean status,Integer page,Integer limit){
+        DataApiResult result=new DataApiResult();
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<User> list;
         if(status) {
-            list=userRepository.findOneByUserId(StatesConstant.ACTIVE);
+            list=userRepository.findAllByStatus(StatesConstant.ACTIVE,pageable);
         }else{
-            list=userRepository.findOneByUserId(StatesConstant.NOTACTIVE);
+            list=userRepository.findAllByStatus(StatesConstant.NOTACTIVE,pageable);
         }
         List<ProfileResponses> responsesList=new ArrayList<>();
         for (User use:list) {
@@ -105,6 +112,34 @@ public class ProfileServices extends BaseServices {
             profileResponses.setImage(use.getProfile().getImage());
             responsesList.add(profileResponses);
         }
-        return responsesList;
+        result.setMessage("List profile!");
+        result.setTotalItem(list.getTotalElements());
+        result.setData(responsesList);
+        result.setSuccess(true);
+        return result;
+    }
+    public ResponseEntity<?> createProfile(ProfileDTO dto) {
+        User user=new User();
+        user.setUserName(dto.getEmail());
+        user.setPassWord(dto.getEmail());
+        user.setStatus(StatesConstant.ACTIVE);
+        User user1=userRepository.save(user);
+
+        UserRole userRole = new UserRole();
+        userRole.setUserId(user1.getId());
+        userRole.setRoleId(2L);
+        userRoleRepository.save(userRole);
+
+        Profile profile = new Profile();
+        profile.setFullName(dto.getFullName());
+        profile.setAddress(dto.getAddress());
+        profile.setEmail(dto.getEmail());
+        profile.setImage(dto.getImage());
+        profile.setPhoneNumber(dto.getPhoneNumber());
+        profile.setGender(dto.getGender());
+        profile.setBirthDay(dto.getBirthDay());
+        profile.setUser(user1);
+        profileRepository.save(profile);
+        return ResponseEntity.ok(true);
     }
 }

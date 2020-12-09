@@ -20,11 +20,11 @@ public class ProductDTO {
 
     @PositiveOrZero(message = "Do not enter negative numbers")
     @NotNull(message = "Missing the field categoryID")
-    private Long categoryID;
+    private Long categoryId;
 
     @PositiveOrZero(message = "Do not enter negative numbers")
     @NotNull(message = "Missing the field categoryID")
-    private Long brandID;
+    private Long brandId;
 
     @NotNull(message = "Missing the field unit")
     private String unit;
@@ -45,10 +45,12 @@ public class ProductDTO {
 
     private BigDecimal price;
 
-    @NotBlank
+
     private String mainImage;
 
     private List<CategoryAttributeValueDTO> value;
 
     private List<Long> categoryAttributeValueID;
+
+    private List<String> images;
 }

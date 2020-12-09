@@ -3,6 +3,7 @@ package com.poly.petcare.app.controllers.api;
 import com.poly.petcare.app.commom.ChangePasswordVM;
 import com.poly.petcare.app.dtos.ProfileDTO;
 import com.poly.petcare.app.responses.ProfileResponses;
+import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.User;
 import com.poly.petcare.domain.services.ProfileServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/profile")
@@ -39,8 +41,16 @@ public class ProfileControllerApi {
     public ResponseEntity<?> infoByUser(@PathVariable Long userId) {
         return profileServices.infoByUser(userId);
     }
+
     @GetMapping("listProfile")
-    public List<ProfileResponses> listProfile(@RequestParam(name = "status") Boolean status) {
-        return profileServices.listProfile(status);
+    public DataApiResult listProfile(@RequestParam(name = "status") Boolean status,
+                                     @RequestParam(name = "page") Optional<Integer> page,
+                                     @RequestParam(name = "limit") Optional<Integer> limit) {
+        return profileServices.listProfile(status,page.orElse(0),limit.orElse(0));
+    }
+
+    @PostMapping("createProfile")
+    public ResponseEntity<?> createProfile(@RequestBody ProfileDTO profileDTO){
+        return profileServices.createProfile(profileDTO);
     }
 }

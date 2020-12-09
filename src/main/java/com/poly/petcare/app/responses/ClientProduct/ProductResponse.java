@@ -1,11 +1,10 @@
-package com.poly.petcare.app.responses;
+package com.poly.petcare.app.responses.ClientProduct;
 
 import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
 import com.poly.petcare.domain.entites.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ProductResponse {
-
     private Long id;
 
     private String code;
@@ -29,18 +27,18 @@ public class ProductResponse {
 
     private String descriptionShort;
 
-    private Long brandId;
-
     private String brandName;
 
     private String unit;
 
-    private Long categoryId;
+    private String categoryId;
 
     private String categoryName;
 
     private List<CategoryAttributeValueResponses> categoryAttributeValueResponses;
 
     private List<ProductImage> productImageList;
+
+    private List<ProductStoreResponse> productStoreResponses;
 
 }

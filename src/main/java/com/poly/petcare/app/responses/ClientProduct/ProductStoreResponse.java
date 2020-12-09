@@ -1,4 +1,4 @@
-package com.poly.petcare.app.responses;
+package com.poly.petcare.app.responses.ClientProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,5 +11,4 @@ public class ProductStoreResponse {
     private Integer quantity;
     private Long expiryDate;
     private String codeTag;
-    private ProductResponse product;
 }

@@ -33,12 +33,21 @@ public class ProductStoreSpecification {
     }
 
     /**
-     * Lấy ra danh sách product có ExpiryDate > thời gian hiện tại
+     * Lấy ra danh sách product có trạng thái = true
      * @param
      * @return
      */
     public static Specification<Product> hasStatus() {
         return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("products").get("status"), true);
+    }
+
+    /**
+     * Lấy ra danh sách product có không có ExpiryDate
+     * @param
+     * @return
+     */
+    public static Specification<Product> hasNoExpiryDate() {
+        return (root, query, cb) -> cb.equal(root.get("expiryDate"), 0);
     }
 
     /**

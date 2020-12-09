@@ -89,21 +89,26 @@ public class ProductService extends BaseServices {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity createProduct(ProductDTO dto) {
-        Category category = categoryRepository.getOne(dto.getCategoryID());
-        Brand brand = brandRepository.getOne(dto.getBrandID());
+        Category category = categoryRepository.getOne(dto.getCategoryId());
+        Brand brand = brandRepository.getOne(dto.getBrandId());
         List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
-        for (Long id : dto.getCategoryAttributeValueID()) {
-            CategoryAttributeValue Value = new CategoryAttributeValue();
-            Value.setId(id);
-            categoryAttributeValues.add(Value);
+        if(dto.getCategoryAttributeValueID().size()>0) {
+            for (Long id : dto.getCategoryAttributeValueID()) {
+                CategoryAttributeValue Value = new CategoryAttributeValue();
+                Value.setId(id);
+                categoryAttributeValues.add(Value);
+            }
+        }else{
+            categoryAttributeValues=null;
         }
+
         if (ConverCode.convertCode(codeMax, dto.getCode(), "SP").startsWith("SP")) {
             codeMax += 1;
         }
         Product product = Product.builder()
                 .code(ConverCode.convertCode(codeMax, dto.getCode(), "SP"))
                 .name(dto.getName())
-                .mainImage(dto.getMainImage())
+                .mainImage(dto.getImages().get(0))
                 .descriptionShort(dto.getDescriptionShort())
                 .descriptionLong(dto.getDescriptionLong())
                 .category(category)
@@ -114,7 +119,15 @@ public class ProductService extends BaseServices {
                 .categoryAttributeValues(categoryAttributeValues)
                 .build();
         try {
-            productRepository.save(product);
+            Product p=productRepository.save(product);
+            if(dto.getImages().size()>0){
+                for (String link:dto.getImages()) {
+                    ProductImage productImage=new ProductImage();
+                    productImage.setLink(link);
+                    productImage.setProduct(p);
+                    productImageRepository.save(productImage);
+                }
+            }
             return ResponseEntity.ok(true);
         }catch(Exception e){
             System.out.println(e);
@@ -123,9 +136,9 @@ public class ProductService extends BaseServices {
     }
 
     public ResponseEntity<?> listProduct(int page, int limit) {
-        DataApiResult result = new DataApiResult();
         Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1, ">").
-                and(ProductStoreSpecification.hasExpiryDate()).and(ProductStoreSpecification.hasStatus()));
+                and(ProductStoreSpecification.hasExpiryDate()).and(ProductStoreSpecification.hasStatus()).
+                or(ProductStoreSpecification.hasNoExpiryDate()));
         Pageable pageable = PageRequest.of(page, limit);
         listProduct(conditions,pageable);
         return listProduct(conditions,pageable);
@@ -155,11 +168,18 @@ public class ProductService extends BaseServices {
     }
 
     public ResponseEntity<?> edit(Long productID, ProductDTO productDTO) {
-        Category category = categoryRepository.getOne(productDTO.getCategoryID());
-        Brand brand = brandRepository.getOne(productDTO.getBrandID());
+        Category category = categoryRepository.getOne(productDTO.getCategoryId());
+        Brand brand = brandRepository.getOne(productDTO.getBrandId());
         Product product = productRepository.findById(productID).orElse(null);
         if (Objects.isNull(product)) {
             throw new ResourceNotFoundException("Not found productID:" + productID);
+        }
+        List<ProductImage> productImageList=productImageRepository.findAllByProduct_Id(productID);
+        if(Objects.isNull(productImageList)) {
+            throw new ResourceNotFoundException("Not found productImageList:" + productID);
+        }
+        for (ProductImage i:productImageList) {
+            productImageRepository.delete(i);
         }
         List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
         for (Long id : productDTO.getCategoryAttributeValueID()) {
@@ -175,6 +195,14 @@ public class ProductService extends BaseServices {
         product.setDescriptionShort(productDTO.getDescriptionShort());
         product.setDescriptionLong(productDTO.getDescriptionLong());
         product.setCategoryAttributeValues(categoryAttributeValues);
+        if(productDTO.getImages().size()>0) {
+            for (String link : productDTO.getImages()) {
+                ProductImage productImage = new ProductImage();
+                productImage.setLink(link);
+                productImage.setProduct(product);
+                productImageRepository.save(productImage);
+            }
+        }
         try {
             productRepository.saveAndFlush(product);
             return ResponseEntity.ok(true);
@@ -289,15 +317,21 @@ public class ProductService extends BaseServices {
         }
     }
 
-//    public ResponseEntity<?> findByCategoryAttributeValue(int page,int limit,long id) {
-//        DataApiResult result = new DataApiResult();
-//        Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1,">").
-//                and(ProductStoreSpecification.hasProductCategoryAttributeValue(id))
-//        );
-//        Pageable pageable = PageRequest.of(page, limit);
-//        listProduct(conditions,pageable);
-//        return listProduct(conditions,pageable);
-//    }
+    public DataApiResult listProductAdmin(Integer page,Integer limit) {
+        DataApiResult result=new DataApiResult();
+        Pageable pageable = PageRequest.of(page, limit);
+        List<ProductResponse> list=new ArrayList<>();
+        Page<Product> productList=productRepository.findAll(pageable);
+        for (Product p:productList) {
+            ProductResponse productResponse=productMapper.convertToDTO(p);
+            list.add(productResponse);
+        }
+        result.setSuccess(true);
+        result.setData(list);
+        result.setTotalItem(productList.getTotalElements());
+        result.setMessage("All list product");
+        return result;
+    }
 
 
 }
