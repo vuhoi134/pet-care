@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +30,8 @@ public class LoginControllerApi {
     private AuthService authService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/wellcome")
     public String wellcomeController() {
@@ -59,12 +62,36 @@ public class LoginControllerApi {
     }
 
     @PostMapping("/login")
-    public DataApiResult login(@RequestBody LoginRequest loginRequest){
-        User u=userRepository.findByUserNameAndPassWord(loginRequest.getUsername(),loginRequest.getPassword());
+    public DataApiResult login(@RequestBody LoginRequest loginRequest) throws Exception {
+//        System.out.println(passwordEncoder.encode(loginRequest.getPassword())+" Có");
+//        User u=userRepository.findByUserNameAndPassWord(loginRequest.getUsername(),passwordEncoder.encode(loginRequest.getPassword()));
+//        if(u!=null){
+//            DataApiResult result=new DataApiResult();
+//            result.setMessage("Login Success!");
+//            result.setSuccess(true);
+//            result.setData(u.getId());
+//        }
+//        DataApiResult result=new DataApiResult();
+//        result.setMessage("Login false!");
+//        result.setSuccess(false);
+
         DataApiResult result=new DataApiResult();
-        result.setMessage("Login Success!");
-        result.setSuccess(true);
-        result.setData(u.getId());
-        return result;
+        try {
+            Authentication authentication =authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User u=userRepository.findByUserName(loginRequest.getUsername());
+            result.setMessage("Login Success!");
+            result.setSuccess(true);
+            result.setData(u.getId());
+            return result;
+        } catch (Exception e) {
+            throw new Exception("username và password không hợp lệ");
+
+        }
     }
 }

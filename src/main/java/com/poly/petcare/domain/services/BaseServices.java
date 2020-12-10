@@ -64,4 +64,6 @@ public class BaseServices {
     protected WearHouseRepository wearHouseRepository;
     @Autowired
     protected InputDetailRepository inputDetailRepository;
+    @Autowired
+    protected OrderTransactionRepository orderTransactionRepository;
 }

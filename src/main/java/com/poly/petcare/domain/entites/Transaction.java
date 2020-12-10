@@ -3,6 +3,8 @@ package com.poly.petcare.domain.entites;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity(name = "dbo_transaction")
@@ -25,7 +27,10 @@ public class Transaction extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @ManyToMany(mappedBy = "transactions")
+    private List<Order> orders=new ArrayList<>();
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "order_id")
+//    private Order order;
 }

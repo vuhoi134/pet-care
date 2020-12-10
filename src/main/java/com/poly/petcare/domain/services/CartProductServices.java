@@ -85,11 +85,12 @@ public class CartProductServices extends BaseServices {
             }
         }
         if(dto.getUserId()>0 && dto.getProductId() > 0){ // khách hàng có tài khoản
-            Cart cartEntity = cartRepository.findByUser(userRepository.getOne(dto.getUserId()));
             Product productEntity = productRepository.getOne(dto.getProductId());
             if (dto.getAmount() > productStore.getQuantityStore()){
                 throw new ResourceNotFoundException("Quantity must not be exceeded");
             }
+
+            Cart cartEntity = cartRepository.findByUser(userRepository.getOne(dto.getUserId()));
 
             if (cartEntity != null && productEntity != null) {
                 CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cartEntity.getId(), productEntity.getId());
@@ -111,6 +112,35 @@ public class CartProductServices extends BaseServices {
                 }
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
+                return result;
+            }else if (cartEntity == null && productEntity != null){
+                Cart cart=new Cart();
+                cart.setGuid(dto.getGuid());
+                cart.setUser(userRepository.getOne(dto.getUserId()));
+                Cart cart1=cartRepository.save(cart);
+
+                CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cart1.getId(), productEntity.getId());
+                if (cartProductEntity != null) {
+                    cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
+                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    cartProductRepository.saveAndFlush(cartProductEntity);
+                    productStoreRepository.saveAndFlush(productStore);
+                } else {
+                    CartProduct cartProduct = new CartProduct();
+                    cartProduct.setAmount(dto.getAmount());
+                    cartProduct.setProduct(productEntity);
+                    cartProduct.setCart(cart1);
+                    cartProduct.setProduct(productEntity);
+                    cartProductRepository.save(cartProduct);
+                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    productStoreRepository.saveAndFlush(productStore);
+                }
+                result.setMessage("Add to cart successfully!");
+                result.setSuccess(true);
+                return result;
+            }else{
+                result.setMessage("Fail!");
+                result.setSuccess(false);
                 return result;
             }
         }

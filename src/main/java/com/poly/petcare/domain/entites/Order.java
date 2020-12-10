@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity(name = "dbo_order")
@@ -48,7 +50,12 @@ public class Order extends BaseEntity{
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "order")
-    private List<Transaction> transactions;
+//    @OneToMany(mappedBy = "order")
+//    private List<Transaction> transactions;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "dbo_order_transaction", joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+    private Set<Transaction> transactions = new HashSet<>();
 
 }

@@ -78,9 +78,9 @@ public class ProfileServices extends BaseServices {
         return ResponseEntity.ok(responses);
     }
 
-    public ResponseEntity<?> changePassWord(ChangePasswordVM password,String userName) {
+    public ResponseEntity<?> changePassWord(ChangePasswordVM password,Long userId) {
 //        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User userEntity = userRepository.findByUserName(userName);
+        User userEntity = userRepository.getOne(userId);
         if (passwordEncoder.matches(password.getCurrentPassword(), userEntity.getPassWord()) == true){
             if (password.getNewPassword().equals(password.getConfirmPassword())){
                 userEntity.setPassWord(passwordEncoder.encode(password.getNewPassword()));

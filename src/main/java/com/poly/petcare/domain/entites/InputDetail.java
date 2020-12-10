@@ -27,6 +27,9 @@ public class InputDetail {
     @Column(name = "code_tag")
     private String codeTag;
 
+    @Column(name = "expiry_date")
+    private Long expiryDate;
+
     @Column(name = "status")
     private Integer status;
 

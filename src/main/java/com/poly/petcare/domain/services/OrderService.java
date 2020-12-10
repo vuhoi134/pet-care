@@ -60,7 +60,7 @@ public class OrderService extends BaseServices{
     public BaseApiResult createOrder(OrderDTO orderDTO){
         codeMax += 1;
         BaseApiResult result = new BaseApiResult();
-        if(orderDTO.getUserId()==0){
+        if(orderDTO.getUserId()==0){ // khách hàng vãng lai
             Order order=orderRepository.findByGuid(orderDTO.getGuid());
             if(order != null){
 //                for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
@@ -72,19 +72,15 @@ public class OrderService extends BaseServices{
 //                    orderDetailRepository.save(orderDetail);
 //                }
             }else{
-                List<Transaction> transactionList=new ArrayList<>();
-                for (long id:orderDTO.getTransactionId()) {
-                    transactionList.add(transactionRepository.getOne(id));
-                }
+                String pass=String.valueOf(new Date().getTime());
                 User user=new User();
                 user.setUserName(orderDTO.getEmail());
-                user.setPassWord(String.valueOf(new Date().getTime()));
+                user.setPassWord(passwordEncoder.encode(pass));
                 User user1=userRepository.save(user);
                 Order order1=new Order();
                 order1.setGuid(orderDTO.getGuid());
                 order1.setCode(ConverCode.convertCode(codeMax, "", "ODR"));
                 order1.setUserName(orderDTO.getUserName());
-                order1.setTransactions(transactionList);
                 order1.setEmail(orderDTO.getEmail());
                 order1.setAddress(orderDTO.getAddress()+" "+orderDTO.getCity());
                 order1.setPhoneNumber(orderDTO.getPhoneNumber());
@@ -93,6 +89,12 @@ public class OrderService extends BaseServices{
                 order1.setStatus(orderDTO.getStatus());
                 order1.setUser(user1);
                 Order order2=orderRepository.save(order1);
+                for (long id:orderDTO.getTransactionId()) {
+                    OrderTransaction orderTransaction=new OrderTransaction();
+                    orderTransaction.setOrderId(order2.getId());
+                    orderTransaction.setTransactionId(id);
+                    orderTransactionRepository.save(orderTransaction);
+                }
                 List<OrderDetail> orderDetailList=new ArrayList<>();
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                     OrderDetail orderDetail=new OrderDetail();
@@ -114,13 +116,13 @@ public class OrderService extends BaseServices{
                 String textTTDH="Mã đơn hàng của quý khách là: "+order2.getCode()+"\n";
                 textTTDH+="Sản phẩm đặt hàng: ";
                 for (OrderDetail od:orderDetailList) {
-                    textTTDH+="Tên sản phẩm: "+od.getProduct().getName()+"\n"+
-                            "Giá: "+od.getPrice()+
-                            "Số lượng: "+od.getQuantity()+
+                    textTTDH+="   - Tên sản phẩm: "+od.getProduct().getName()+"\n"+
+                            "     Giá: "+od.getPrice()+" VNĐ"+"\n"+
+                            "     Số lượng: "+od.getQuantity()+
                             "\n \n";
                 }
 
-                String textTK="Tài khoản: "+user1.getUserName()+"\n"+"Mật khẩu: "+user1.getPassWord();
+                String textTK="Tài khoản: "+user1.getUserName()+"\n"+"Mật khẩu: "+pass;
                 if(mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",textTTDH)&&
                         mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin tài khoản",textTK)){
                     result.setMessage("Create Order Success!");
@@ -138,7 +140,6 @@ public class OrderService extends BaseServices{
             order1.setUser(user);
             order1.setGuid(orderDTO.getGuid());
             order1.setUserName(orderDTO.getUserName());
-            order1.setTransactions(transactionList);
             order1.setEmail(orderDTO.getEmail());
             order1.setAddress(orderDTO.getAddress()+" "+orderDTO.getCity());
             order1.setPhoneNumber(orderDTO.getPhoneNumber());
@@ -146,6 +147,12 @@ public class OrderService extends BaseServices{
             order1.setDiscount(orderDTO.getDiscount());
             order1.setStatus(orderDTO.getStatus());
             Order order2=orderRepository.save(order1);
+            for (long id:orderDTO.getTransactionId()) {
+                OrderTransaction orderTransaction=new OrderTransaction();
+                orderTransaction.setOrderId(order2.getId());
+                orderTransaction.setTransactionId(id);
+                orderTransactionRepository.save(orderTransaction);
+            }
             List<OrderDetail> orderDetailList=new ArrayList<>();
             for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                 OrderDetail orderDetail=new OrderDetail();
@@ -168,9 +175,9 @@ public class OrderService extends BaseServices{
             String textTTDH="Mã đơn hàng của quý khách là: "+order2.getCode()+"\n";
             textTTDH+="Sản phẩm đặt hàng: \n";
             for (OrderDetail od:orderDetailList) {
-                textTTDH+="Tên sản phẩm: "+od.getProduct().getName()+"\n"+
-                        "Giá: "+od.getPrice()+"\n"+
-                        "Số lượng: "+od.getQuantity()+
+                textTTDH+="   - Tên sản phẩm: "+od.getProduct().getName()+"\n"+
+                        "     Giá: "+od.getPrice()+" VNĐ"+"\n"+
+                        "     Số lượng: "+od.getQuantity()+
                         "\n \n";
             }
             if(mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",textTTDH)){
@@ -249,15 +256,10 @@ public class OrderService extends BaseServices{
     public BaseApiResult createOrderStore(OrderDTO orderDTO){
             codeMax += 1;
         BaseApiResult result = new BaseApiResult();
-                List<Transaction> transactionList=new ArrayList<>();
-                for (long id:orderDTO.getTransactionId()) {
-                    transactionList.add(transactionRepository.getOne(id));
-                }
                 Order order1=new Order();
                 order1.setGuid(orderDTO.getGuid());
                 order1.setCode(ConverCode.convertCode(codeMax, "", "ODR"));
                 order1.setUserName(orderDTO.getUserName());
-                order1.setTransactions(transactionList);
                 order1.setEmail(orderDTO.getEmail());
                 order1.setAddress(orderDTO.getAddress()+" "+orderDTO.getCity());
                 order1.setPhoneNumber(orderDTO.getPhoneNumber());
@@ -265,6 +267,15 @@ public class OrderService extends BaseServices{
                 order1.setDiscount(orderDTO.getDiscount());
                 order1.setStatus(orderDTO.getStatus());
                 Order order2=orderRepository.save(order1);
+
+                for (long id:orderDTO.getTransactionId()) {
+//                    transactionList.add(transactionRepository.getOne(id));
+                    OrderTransaction orderTransaction=new OrderTransaction();
+                    orderTransaction.setOrderId(order2.getId());
+                    orderTransaction.setTransactionId(id);
+                    orderTransactionRepository.save(orderTransaction);
+                }
+
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                     OrderDetail orderDetail=new OrderDetail();
                     orderDetail.setOrder(order2);

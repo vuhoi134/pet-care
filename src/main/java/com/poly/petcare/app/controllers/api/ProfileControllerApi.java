@@ -28,9 +28,9 @@ public class ProfileControllerApi {
     public ResponseEntity<?> editProfile(@Valid @RequestBody ProfileDTO profileDTO, @PathVariable Long userId) {
         return profileServices.editProfile(profileDTO, userId);
     }
-    @PostMapping(value ="changePassWord")
-    public ResponseEntity<?> changePassWord(@Valid @RequestBody ChangePasswordVM changePasswordVM,  @RequestParam(name = "userName") String userName){
-        return profileServices.changePassWord(changePasswordVM,userName);
+    @PutMapping(value ="changePassWord/{userId}")
+    public ResponseEntity<?> changePassWord(@Valid @RequestBody ChangePasswordVM changePasswordVM,  @PathVariable Long userId){
+        return profileServices.changePassWord(changePasswordVM,userId);
     }
     @GetMapping("info/{profileID}")
     public ResponseEntity<?> info(@PathVariable Long profileID) {
