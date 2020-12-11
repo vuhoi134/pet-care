@@ -107,4 +107,13 @@ public class ProductStoreSpecification {
     public static Specification<Product> hasProductBrand(long id) {
         return (root, query, cb) -> cb.equal(root.get("products").get("brand").get("id"), id);
     }
+
+    /**
+     * Lấy ra danh sách product theo codeTag
+     * @param codeTag
+     * @return
+     */
+    public static Specification<Product> hasProductByCodeTag(String codeTag) {
+        return (root, query, cb) -> cb.equal(root.get("codeTag"), codeTag);
+    }
 }

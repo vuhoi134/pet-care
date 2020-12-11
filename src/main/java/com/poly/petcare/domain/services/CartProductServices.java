@@ -57,8 +57,9 @@ public class CartProductServices extends BaseServices {
                     cartProduct.setCart(cartEntity);
                     cartProduct.setProduct(productEntity);
                     cartProductRepository.save(cartProduct);
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
-                    productStoreRepository.saveAndFlush(productStore);
+
+//                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+//                    productStoreRepository.saveAndFlush(productStore);
                 }
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
@@ -76,8 +77,10 @@ public class CartProductServices extends BaseServices {
                 cartProduct.setCart(cartE2);
                 cartProduct.setProduct(productEntity);
                 cartProductRepository.save(cartProduct);
-                productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
-                productStoreRepository.saveAndFlush(productStore);
+
+//                productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+//                productStoreRepository.saveAndFlush(productStore);
+
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
                 result.setTotalItem(dto.getAmount().longValue());
@@ -107,8 +110,9 @@ public class CartProductServices extends BaseServices {
                     cartProduct.setCart(cartEntity);
                     cartProduct.setProduct(productEntity);
                     cartProductRepository.save(cartProduct);
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
-                    productStoreRepository.saveAndFlush(productStore);
+
+//                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+//                    productStoreRepository.saveAndFlush(productStore);
                 }
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
@@ -132,8 +136,9 @@ public class CartProductServices extends BaseServices {
                     cartProduct.setCart(cart1);
                     cartProduct.setProduct(productEntity);
                     cartProductRepository.save(cartProduct);
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
-                    productStoreRepository.saveAndFlush(productStore);
+
+//                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+//                    productStoreRepository.saveAndFlush(productStore);
                 }
                 result.setMessage("Add to cart successfully!");
                 result.setSuccess(true);
@@ -166,9 +171,11 @@ public class CartProductServices extends BaseServices {
             for (CartResponse item:cartResponseList) {
                 totalItem+=item.getCartProducts().size();
                 for (CartProduct c:item.getCartProducts()) {
+                    ProductStore productStore=productStoreRepository.findByProducts_Id(c.getProduct().getId());
                     CartProductResponse cartProductResponse = cartProductMapper.convertToDTO(c);
                     cartProductResponse.setProductResponse(productMapper.convertToDTO(c.getProduct()));
                     cartProductResponse.setTotalMoney(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
+                    cartProductResponse.setQuantityStore(productStore.getQuantityStore());
                     totalMoney+=(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
                     list.add(cartProductResponse);
                 }
@@ -200,8 +207,10 @@ public class CartProductServices extends BaseServices {
             List<CartProductResponse> list=new ArrayList<>();
             Long totalMoney=0L;
             for (CartProduct item:cartProductList) {
+                ProductStore productStore=productStoreRepository.findByProducts_Id(item.getProduct().getId());
                 CartProductResponse c=cartProductMapper.convertToDTO(item);
                 c.setProductResponse(productMapper.convertToDTO(item.getProduct()));
+                c.setQuantityStore(productStore.getQuantityStore());
                 totalMoney+=(Long.valueOf(item.getAmount()*item.getProduct().getPrice().intValue()));
                 list.add(c);
             }

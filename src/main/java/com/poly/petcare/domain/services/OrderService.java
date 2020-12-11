@@ -98,11 +98,16 @@ public class OrderService extends BaseServices{
                 List<OrderDetail> orderDetailList=new ArrayList<>();
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                     OrderDetail orderDetail=new OrderDetail();
+                    ProductStore productStore = productStoreRepository.getOne(item.getProductId());
                     orderDetail.setOrder(order2);
                     orderDetail.setPrice(item.getPrice());
                     orderDetail.setQuantity(item.getQuantity());
                     orderDetail.setProduct(productRepository.getOne(item.getProductId()));
                     orderDetailRepository.save(orderDetail);
+
+                    //trừ số lượng sản phẩm trên cửa hàng
+                    productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
+                    productStoreRepository.saveAndFlush(productStore);
                     orderDetailList.add(orderDetail);
                 }
                 Profile profile=new Profile();
@@ -113,14 +118,19 @@ public class OrderService extends BaseServices{
                 cartRepository.delete(cart);
 
                 // sent mail đơn hàng và mail tài khoản
+                Integer totalOrderMoney=0;
                 String textTTDH="Mã đơn hàng của quý khách là: "+order2.getCode()+"\n";
                 textTTDH+="Sản phẩm đặt hàng: ";
+
                 for (OrderDetail od:orderDetailList) {
                     textTTDH+="   - Tên sản phẩm: "+od.getProduct().getName()+"\n"+
-                            "     Giá: "+od.getPrice()+" VNĐ"+"\n"+
-                            "     Số lượng: "+od.getQuantity()+
-                            "\n \n";
+                            "      Giá: "+od.getPrice()+" VNĐ"+"\n"+
+                            "      Số lượng: "+od.getQuantity()+"\n"+
+                            "      Thành tiền: "+od.getQuantity()*od.getPrice().intValue()+"\n"+
+                            "\n";
+                    totalOrderMoney+=od.getQuantity()*od.getPrice().intValue();
                 }
+                textTTDH+="Tổng giá trị đơn hàng: "+totalOrderMoney+" VNĐ";
 
                 String textTK="Tài khoản: "+user1.getUserName()+"\n"+"Mật khẩu: "+pass;
                 if(mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",textTTDH)&&
@@ -156,11 +166,16 @@ public class OrderService extends BaseServices{
             List<OrderDetail> orderDetailList=new ArrayList<>();
             for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                 OrderDetail orderDetail=new OrderDetail();
+                ProductStore productStore = productStoreRepository.getOne(item.getProductId());
                 orderDetail.setOrder(order2);
                 orderDetail.setPrice(item.getPrice());
                 orderDetail.setQuantity(item.getQuantity());
                 orderDetail.setProduct(productRepository.getOne(item.getProductId()));
                 orderDetailRepository.save(orderDetail);
+
+                //trừ số lượng sản phẩm trên cửa hàng
+                productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
+                productStoreRepository.saveAndFlush(productStore);
                 orderDetailList.add(orderDetail);
             }
             // xóa giỏ hàng chi tiết
@@ -172,14 +187,17 @@ public class OrderService extends BaseServices{
             }
 
             // sent mail đơn hàng
+            Integer totalOrderMoney=0;
             String textTTDH="Mã đơn hàng của quý khách là: "+order2.getCode()+"\n";
             textTTDH+="Sản phẩm đặt hàng: \n";
             for (OrderDetail od:orderDetailList) {
                 textTTDH+="   - Tên sản phẩm: "+od.getProduct().getName()+"\n"+
-                        "     Giá: "+od.getPrice()+" VNĐ"+"\n"+
-                        "     Số lượng: "+od.getQuantity()+
-                        "\n \n";
+                        "      Giá: "+od.getPrice()+" VNĐ"+"\n"+
+                        "      Số lượng: "+od.getQuantity()+"\n"+
+                        "      Thành tiền: "+od.getQuantity()*od.getPrice().intValue()+"\n"+
+                        "\n";
             }
+            textTTDH+="Tổng giá trị đơn hàng: "+totalOrderMoney+" VNĐ";
             if(mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",textTTDH)){
                 result.setMessage("Create Order Success!");
                 result.setSuccess(true);

@@ -14,4 +14,5 @@ public class CartProductResponse {
     private Integer amount;
     private ProductResponse productResponse;
     private Long totalMoney;
+    private Long quantityStore;
 }

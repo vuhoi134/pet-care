@@ -136,8 +136,7 @@ public class ProductService extends BaseServices {
     }
 
     public ResponseEntity<?> listProduct(int page, int limit) {
-        Specification conditions = Specification.where(ProductStoreSpecification.hasQuantity(1, ">").
-                and(ProductStoreSpecification.hasExpiryDate()).and(ProductStoreSpecification.hasStatus()).
+        Specification conditions = Specification.where((ProductStoreSpecification.hasExpiryDate()).and(ProductStoreSpecification.hasStatus()).
                 or(ProductStoreSpecification.hasNoExpiryDate()));
         Pageable pageable = PageRequest.of(page, limit);
         listProduct(conditions,pageable);
