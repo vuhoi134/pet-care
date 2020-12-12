@@ -41,7 +41,7 @@ public class ProductControllerApi {
         );
     }
 
-    @PutMapping(value = "{productID}")
+    @PutMapping(value = "edit/{productID}")
     public ResponseEntity<?> edit(@PathVariable Long productID,
                                   @RequestBody ProductDTO dto) {
         return productService.edit(productID, dto);
@@ -90,5 +90,10 @@ public class ProductControllerApi {
     public DataApiResult allProduct(@RequestParam(name = "page") Optional<Integer> page,
                                             @RequestParam(name = "limit") Optional<Integer> limit) {
         return productService.listProductAdmin(page.orElse(0),limit.orElse(0));
+    }
+
+    @GetMapping(value = "/topProduct")
+    public DataApiResult allProduct(@RequestParam(name = "status") Optional<Long> status) {
+        return productService.topProduct(status.orElse(0L));
     }
 }

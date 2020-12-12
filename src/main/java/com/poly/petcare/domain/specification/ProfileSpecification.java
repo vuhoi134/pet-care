@@ -21,4 +21,22 @@ public class ProfileSpecification {
     public static Specification<Profile> hasListProfile(Long userId){
         return (root, query, cb) -> cb.equal(root.get("user").get("roles"), userId);
     }
+
+    /**
+     * Lấy ra thông tin profile theo phoneNumber
+     * @param phoneNumber
+     * @return
+     */
+    public static Specification<Profile> hasProfileByPhone(String phoneNumber){
+        return (root, query, cb) -> cb.equal(root.get("phoneNumber"), phoneNumber);
+    }
+
+    /**
+     * Lấy ra thông tin profile theo phoneNumber
+     * @param email
+     * @return
+     */
+    public static Specification<Profile> hasProfileByEmail(String email){
+        return (root, query, cb) -> cb.equal(root.get("email"), email);
+    }
 }

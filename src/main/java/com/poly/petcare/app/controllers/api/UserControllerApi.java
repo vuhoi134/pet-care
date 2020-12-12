@@ -32,4 +32,9 @@ public class UserControllerApi {
         return userServices.edit(userID);
     }
 
+    @PostMapping(value = "forgot")
+    public ResponseEntity<?> forgotPassword(@RequestParam(name = "forgot") String forgot){
+        return userServices.forgotPassword(forgot);
+    }
+
 }

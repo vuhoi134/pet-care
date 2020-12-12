@@ -20,4 +20,5 @@ public class ProfileResponses {
     private Date birthDay;
     private String image;
     private String gender;
+    private Boolean status;
 }

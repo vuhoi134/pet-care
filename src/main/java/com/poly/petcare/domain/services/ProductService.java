@@ -12,6 +12,7 @@ import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
 import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
+import com.poly.petcare.domain.repository.OrderDetailRepository;
 import com.poly.petcare.domain.repository.ProductRepository;
 import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductSpecification;
@@ -166,6 +167,7 @@ public class ProductService extends BaseServices {
         return ResponseEntity.ok(result);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> edit(Long productID, ProductDTO productDTO) {
         Category category = categoryRepository.getOne(productDTO.getCategoryId());
         Brand brand = brandRepository.getOne(productDTO.getBrandId());
@@ -178,13 +180,16 @@ public class ProductService extends BaseServices {
             throw new ResourceNotFoundException("Not found productImageList:" + productID);
         }
         for (ProductImage i:productImageList) {
+            System.out.println(i.getId()+" ở đây");
             productImageRepository.delete(i);
         }
         List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
         for (Long id : productDTO.getCategoryAttributeValueID()) {
-            CategoryAttributeValue categoryAttributeValue = new CategoryAttributeValue();
-            categoryAttributeValue.setId(id);
-            categoryAttributeValues.add(categoryAttributeValue);
+            ProductAttributeValue productAttributeValue = new ProductAttributeValue();
+            productAttributeValue.setCategoryAttributeValueId(id);
+            productAttributeValue.setProductId(productID);
+            productAttributeValueRepository.save(productAttributeValue);
+//            categoryAttributeValues.add(categoryAttributeValue);
         }
         product.setCategory(category);
         product.setBrand(brand);
@@ -193,7 +198,7 @@ public class ProductService extends BaseServices {
         product.setMainImage(productDTO.getMainImage());
         product.setDescriptionShort(productDTO.getDescriptionShort());
         product.setDescriptionLong(productDTO.getDescriptionLong());
-        product.setCategoryAttributeValues(categoryAttributeValues);
+//        product.setCategoryAttributeValues(categoryAttributeValues);
         if(productDTO.getImages().size()>0) {
             for (String link : productDTO.getImages()) {
                 ProductImage productImage = new ProductImage();
@@ -220,12 +225,14 @@ public class ProductService extends BaseServices {
         return listProduct(conditions,pageable);
     }
     public List<ProductSearchResponse> searchByNameAdmin(String productName) {
+        Specification conditions = Specification.where(ProductStoreSpecification.hasProductByName(productName));
         List<ProductSearchResponse> list=new ArrayList<>();
-        List<Product> productList=productRepository.findByName(productName);
-        for (Product p:productList) {
+        List<ProductStore> productStoreList=productStoreRepository.findAll(conditions);
+        for (ProductStore p:productStoreList) {
             ProductSearchResponse productSearchResponse=new ProductSearchResponse();
-            productSearchResponse.setId(p.getId());
-            productSearchResponse.setName(p.getName());
+            productSearchResponse.setId(p.getProducts().getId());
+            productSearchResponse.setName(p.getProducts().getName());
+            productSearchResponse.setQuantity(p.getQuantityStore());
             list.add(productSearchResponse);
         }
         return list;
@@ -328,6 +335,31 @@ public class ProductService extends BaseServices {
         result.setSuccess(true);
         result.setData(list);
         result.setTotalItem(productList.getTotalElements());
+        result.setMessage("All list product");
+        return result;
+    }
+
+    public DataApiResult topProduct(Long categoryId){
+        DataApiResult result=new DataApiResult();
+        List<OrderDetailRepository.ODD> detailList=orderDetailRepository.topProduct(categoryId);
+        List<ProductStoreResponse> responseList=new ArrayList<>();
+        for (OrderDetailRepository.ODD item:detailList) {
+            ProductStore productStore=productStoreRepository.findByProducts_Id(item.getProductId());
+            ProductStoreResponse productStoreResponse=productStoreMapper.convertToDTO(productStore);
+            ProductResponse productResponse=new ProductResponse();
+            productResponse=productMapper.convertToDTO(productStore.getProducts());
+            List<CategoryAttributeValueResponses> listC=new ArrayList<>();
+            for (CategoryAttributeValue c:productStore.getProducts().getCategoryAttributeValues()) {
+                CategoryAttributeValueResponses categoryAttributeValueResponses=categoryAttributeValueMapper.convertToDTO(c);
+                listC.add(categoryAttributeValueResponses);
+            }
+            productResponse.setCategoryAttributeValueResponses(listC);
+            productStoreResponse.setProduct(productResponse);
+            responseList.add(productStoreResponse);
+        }
+
+        result.setSuccess(true);
+        result.setData(responseList);
         result.setMessage("All list product");
         return result;
     }

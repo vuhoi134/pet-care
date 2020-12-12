@@ -90,14 +90,16 @@ public class ProfileServices extends BaseServices {
         }return ResponseEntity.ok("Không thành công");
 
     }
-    public DataApiResult listProfile(boolean status,Integer page,Integer limit){
+    public DataApiResult listProfile(Integer status,Integer page,Integer limit){
         DataApiResult result=new DataApiResult();
         Pageable pageable = PageRequest.of(page, limit);
         Page<User> list;
-        if(status) {
+        if(status==1) {
             list=userRepository.findAllByStatus(StatesConstant.ACTIVE,pageable);
-        }else{
+        }else if(status==0){
             list=userRepository.findAllByStatus(StatesConstant.NOTACTIVE,pageable);
+        }else{
+            list=userRepository.findAllByRoles(pageable);
         }
         List<ProfileResponses> responsesList=new ArrayList<>();
         for (User use:list) {
@@ -110,6 +112,11 @@ public class ProfileServices extends BaseServices {
             profileResponses.setBirthDay(use.getProfile().getBirthDay());
             profileResponses.setGender(use.getProfile().getGender());
             profileResponses.setImage(use.getProfile().getImage());
+            if(use.getStatus().equals("ACTIVE")){
+                profileResponses.setStatus(true);
+            }else {
+                profileResponses.setStatus(false);
+            }
             responsesList.add(profileResponses);
         }
         result.setMessage("List profile!");

@@ -66,4 +66,6 @@ public class BaseServices {
     protected InputDetailRepository inputDetailRepository;
     @Autowired
     protected OrderTransactionRepository orderTransactionRepository;
+    @Autowired
+    protected ProductAttributeValueRepository productAttributeValueRepository;
 }

@@ -45,7 +45,6 @@ public class ProductDTO {
 
     private BigDecimal price;
 
-
     private String mainImage;
 
     private List<CategoryAttributeValueDTO> value;

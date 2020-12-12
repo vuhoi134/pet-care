@@ -35,6 +35,8 @@ public class ProductResponse {
 
     private String unit;
 
+    private Boolean status;
+
     private Long categoryId;
 
     private String categoryName;

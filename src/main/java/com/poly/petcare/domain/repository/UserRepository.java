@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query(value="select * from dbo_user u left join dbo_user_role ur on u.id=ur.user_id left join dbo_profile p on u.id=p.user_id where ur.role_id=2 and u.status=:status",nativeQuery = true)
     Page<User> findAllByStatus(@Param("status") String status, Pageable page);
+
+    @Query(value="select * from dbo_user u left join dbo_user_role ur on u.id=ur.user_id left join dbo_profile p on u.id=p.user_id where ur.role_id=2",nativeQuery = true)
+    Page<User> findAllByRoles(Pageable page);
 }

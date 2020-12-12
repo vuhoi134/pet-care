@@ -116,4 +116,13 @@ public class ProductStoreSpecification {
     public static Specification<Product> hasProductByCodeTag(String codeTag) {
         return (root, query, cb) -> cb.equal(root.get("codeTag"), codeTag);
     }
+
+    /**
+     * Lấy ra danh sách product theo đối tượng tìm kiếm
+     * @param content
+     * @return
+     */
+    public static Specification<Product> hasProductByName(String content) {
+            return (root, query, cb) -> cb.like(root.get("products").get("name"), "%" + content + "%");
+    }
 }

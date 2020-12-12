@@ -43,10 +43,10 @@ public class ProfileControllerApi {
     }
 
     @GetMapping("listProfile")
-    public DataApiResult listProfile(@RequestParam(name = "status") Boolean status,
+    public DataApiResult listProfile(@RequestParam(name = "status") Optional<Integer> status,
                                      @RequestParam(name = "page") Optional<Integer> page,
                                      @RequestParam(name = "limit") Optional<Integer> limit) {
-        return profileServices.listProfile(status,page.orElse(0),limit.orElse(0));
+        return profileServices.listProfile(status.orElse(3),page.orElse(0),limit.orElse(0));
     }
 
     @PostMapping("createProfile")
