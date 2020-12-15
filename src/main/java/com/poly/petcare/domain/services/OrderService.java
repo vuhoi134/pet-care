@@ -295,11 +295,17 @@ public class OrderService extends BaseServices{
                 }
 
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
+                    ProductStore productStore = productStoreRepository.getOne(item.getProductId());
                     OrderDetail orderDetail=new OrderDetail();
                     orderDetail.setOrder(order2);
                     orderDetail.setPrice(item.getPrice());
                     orderDetail.setQuantity(item.getQuantity());
                     orderDetail.setProduct(productRepository.getOne(item.getProductId()));
+
+                    //trừ số lượng sản phẩm trên cửa hàng
+                    productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
+                    productStoreRepository.saveAndFlush(productStore);
+
                     orderDetailRepository.save(orderDetail);
                 }
                 Cart cart = cartRepository.findByGuid(orderDTO.getGuid());

@@ -3,10 +3,7 @@ package com.poly.petcare.domain.services;
 import com.poly.petcare.app.dtos.InputDTO;
 import com.poly.petcare.app.dtos.InputDetailDTO;
 import com.poly.petcare.app.result.BaseApiResult;
-import com.poly.petcare.domain.entites.Input;
-import com.poly.petcare.domain.entites.InputDetail;
-import com.poly.petcare.domain.entites.Product;
-import com.poly.petcare.domain.entites.Supplier;
+import com.poly.petcare.domain.entites.*;
 import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
@@ -40,11 +37,12 @@ public class InputService extends BaseServices{
         try {
             // Tạo mới phiếu nhập
             codeMax += 1;
+            Warehouse warehouse=warehouseRepository.getOne(inputDTO.getWarehouseId());
             Input input = new Input();
             input.setCode(ConverCode.convertCode(codeMax, "", "IP"));
             input.setImport_date(new Date());
             input.setUser(userRepository.getOne(inputDTO.getUserId()));
-            input.setWarehouse(warehouseRepository.getOne(inputDTO.getWarehouseId()));
+            input.setWarehouse(warehouse);
             input.setTransporter(inputDTO.getTransporter());
             input.setPhoneTransporter(inputDTO.getPhoneTransporter());
             Input input1 = inputRepository.save(input);
@@ -53,6 +51,7 @@ public class InputService extends BaseServices{
             for (InputDetailDTO item:inputDTO.getInputDetailDTOS()) {
                 Product product = productRepository.getOne(item.getProductId());
                 Supplier supplier = supplierRepository.getOne(item.getSupplierId());
+                String codeTag=product.getCode() + new Date().getTime();
                 InputDetail inputDetail = new InputDetail();
                 inputDetail.setActualAmount(item.getActualAmount());
                 inputDetail.setTheoreticalAmount(item.getTheoreticalAmount());
@@ -61,12 +60,16 @@ public class InputService extends BaseServices{
                 inputDetail.setProduct(product);
                 inputDetail.setSupplier(supplier);
                 inputDetail.setInput(input1);
-                inputDetail.setCodeTag(product.getCode() + new Date().getTime());
-//                try {
+                inputDetail.setCodeTag(codeTag);
+                ProductWarehouse productWarehouse=new ProductWarehouse();
+                productWarehouse.setCodeTag(codeTag);
+                productWarehouse.setProducts(product);
+                productWarehouse.setExpiryDate(item.getExpiryDate().getTime());
+//                productWarehouse.setExpiryDate(new Date().getTime());
+                productWarehouse.setQuantityWarehouse(item.getActualAmount());
+                productWarehouse.setWarehouse(warehouse);
                     inputDetailRepository.save(inputDetail);
-//                }catch(Exception e){
-//
-//                }
+                    productWarehouseRepository.save(productWarehouse);
             }
 
             result.setMessage("Create input success!!");

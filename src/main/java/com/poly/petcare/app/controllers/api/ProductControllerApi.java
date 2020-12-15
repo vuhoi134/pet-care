@@ -2,6 +2,7 @@ package com.poly.petcare.app.controllers.api;
 
 import com.poly.petcare.app.dtos.ProductDTO;
 import com.poly.petcare.app.responses.ProductResponse;
+import com.poly.petcare.app.responses.ProductSearchOutputResponse;
 import com.poly.petcare.app.responses.ProductSearchResponse;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.Product;
@@ -84,6 +85,18 @@ public class ProductControllerApi {
     public List<ProductSearchResponse> adminSearch(
                             @RequestParam("productName") String productName) {
         return productService.searchByNameAdmin(productName);
+    }
+
+    @GetMapping(value = "/adminWarehouse-search")
+    public List<ProductSearchResponse> adminWarehouseSearch(
+            @RequestParam("productName") String productName) {
+        return productService.searchProductInput(productName);
+    }
+
+    @GetMapping(value = "/adminWarehouseOut-search")
+    public List<ProductSearchOutputResponse> adminWarehouseOut(
+            @RequestParam("productName") String productName) {
+        return productService.searchProductOutput(productName);
     }
 
     @GetMapping(value = "/allProduct")

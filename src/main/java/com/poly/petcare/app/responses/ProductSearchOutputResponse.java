@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductSearchResponse {
+public class ProductSearchOutputResponse {
     private Long id;
 
     private String name;
 
     private Long quantity;
 
-    private String code;
+    private String codeTag;
 
     private String attributeValue;
 }

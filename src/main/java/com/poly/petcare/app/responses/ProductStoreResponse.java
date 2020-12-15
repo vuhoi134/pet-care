@@ -12,4 +12,5 @@ public class ProductStoreResponse {
     private Long expiryDate;
     private String codeTag;
     private ProductResponse product;
+    private Long soldQuantity;
 }

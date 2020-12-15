@@ -1,10 +1,7 @@
 package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.ProductDTO;
-import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
-import com.poly.petcare.app.responses.ProductResponse;
-import com.poly.petcare.app.responses.ProductSearchResponse;
-import com.poly.petcare.app.responses.ProductStoreResponse;
+import com.poly.petcare.app.responses.*;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
 import com.poly.petcare.domain.exceptions.ResourceNotFoundException;
@@ -17,6 +14,7 @@ import com.poly.petcare.domain.repository.ProductRepository;
 import com.poly.petcare.domain.specification.CategorySpecification;
 import com.poly.petcare.domain.specification.ProductSpecification;
 import com.poly.petcare.domain.specification.ProductStoreSpecification;
+import com.poly.petcare.domain.specification.ProductWarehouseSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -238,6 +236,41 @@ public class ProductService extends BaseServices {
         return list;
     }
 
+    public List<ProductSearchOutputResponse> searchProductOutput(String productName) {
+        Specification conditions = Specification.where(ProductWarehouseSpecification.hasProductByName(productName));
+        List<ProductSearchOutputResponse> list=new ArrayList<>();
+        List<ProductWarehouse> productStoreList=productWarehouseRepository.findAll(conditions);
+        for (ProductWarehouse p:productStoreList) {
+            ProductSearchOutputResponse response=new ProductSearchOutputResponse();
+            response.setId(p.getProducts().getId());
+            response.setName(p.getProducts().getName());
+            response.setQuantity(p.getQuantityWarehouse());
+            response.setCodeTag(p.getCodeTag());
+            for (CategoryAttributeValue v:p.getProducts().getCategoryAttributeValues()) {
+                response.setAttributeValue(v.getValue());
+            }
+            list.add(response);
+        }
+        return list;
+    }
+
+    public List<ProductSearchResponse> searchProductInput(String productName) {
+        Specification conditions = Specification.where(ProductSpecification.hasProductName(productName));
+        List<ProductSearchResponse> list=new ArrayList<>();
+        List<Product> productList=productRepository.findAll(conditions);
+        for (Product p:productList) {
+            ProductSearchResponse productSearchResponse=new ProductSearchResponse();
+            productSearchResponse.setId(p.getId());
+            productSearchResponse.setName(p.getName());
+            productSearchResponse.setCode(p.getCode());
+            for (CategoryAttributeValue v:p.getCategoryAttributeValues()) {
+                productSearchResponse.setAttributeValue(v.getValue());
+            }
+            list.add(productSearchResponse);
+        }
+        return list;
+    }
+
     public ResponseEntity<?> searchByDesc(int page, int limit, String content) {
         DataApiResult result = new DataApiResult();
         Pageable pageable = PageRequest.of(page, limit);
@@ -354,6 +387,7 @@ public class ProductService extends BaseServices {
                 listC.add(categoryAttributeValueResponses);
             }
             productResponse.setCategoryAttributeValueResponses(listC);
+            productStoreResponse.setSoldQuantity(item.getAmount());
             productStoreResponse.setProduct(productResponse);
             responseList.add(productStoreResponse);
         }

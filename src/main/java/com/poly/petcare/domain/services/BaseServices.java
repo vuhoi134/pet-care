@@ -3,9 +3,6 @@ package com.poly.petcare.domain.services;
 import com.poly.petcare.domain.entites.CartProduct;
 import com.poly.petcare.domain.mapper.ModelMapper;
 import com.poly.petcare.domain.repository.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,4 +65,10 @@ public class BaseServices {
     protected OrderTransactionRepository orderTransactionRepository;
     @Autowired
     protected ProductAttributeValueRepository productAttributeValueRepository;
+    @Autowired
+    protected ProductWarehouseRepository productWarehouseRepository;
+//    @Autowired
+//    protected OutputRepository outputRepository;
+    @Autowired
+    protected OutputDetailRepository outputDetailRepository;
 }

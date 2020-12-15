@@ -7,16 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InputDetailDTO {
+public class OutputDetailDTO {
     private Long actualAmount;
-    private Long theoreticalAmount;
-    private BigDecimal importPrice;
-    private Long supplierId;
     private Long productId;
-    private Date expiryDate;
+    private String codeTag;
+
 }
