@@ -196,6 +196,7 @@ public class OrderService extends BaseServices{
                         "      Số lượng: "+od.getQuantity()+"\n"+
                         "      Thành tiền: "+od.getQuantity()*od.getPrice().intValue()+"\n"+
                         "\n";
+                totalOrderMoney+=od.getQuantity()*od.getPrice().intValue();
             }
             textTTDH+="Tổng giá trị đơn hàng: "+totalOrderMoney+" VNĐ";
             if(mailSerivce.sendSimpleEmail(orderDTO.getEmail(),"Thông tin đơn hàng",textTTDH)){

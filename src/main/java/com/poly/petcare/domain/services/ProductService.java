@@ -246,6 +246,8 @@ public class ProductService extends BaseServices {
             response.setName(p.getProducts().getName());
             response.setQuantity(p.getQuantityWarehouse());
             response.setCodeTag(p.getCodeTag());
+            response.setUnit(p.getProducts().getUnit());
+            response.setPrice(p.getProducts().getPrice());
             for (CategoryAttributeValue v:p.getProducts().getCategoryAttributeValues()) {
                 response.setAttributeValue(v.getValue());
             }

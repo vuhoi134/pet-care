@@ -98,7 +98,6 @@ public class CartProductServices extends BaseServices {
             if (cartEntity != null && productEntity != null) {
                 CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cartEntity.getId(), productEntity.getId());
                 if (cartProductEntity != null) {
-                    System.out.println("Có vào");
                     cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
                     productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
                     cartProductRepository.saveAndFlush(cartProductEntity);
