@@ -17,7 +17,7 @@ public class ProfileResponses {
     private String phoneNumber;
     private String email;
     private String address;
-    private Date birthDay;
+    private String birthDay;
     private String image;
     private String gender;
     private Boolean status;

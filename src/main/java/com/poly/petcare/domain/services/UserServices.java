@@ -46,10 +46,15 @@ public class UserServices extends BaseServices {
         return ResponseEntity.ok(true);
     }
 
-    public ResponseEntity<?> edit(Long userID){
+    public ResponseEntity<?> edit(Long userID,boolean status){
         User user = userRepository.findById(userID).orElse(null);
         if (Objects.isNull(user)){
             throw new ResourceNotFoundException("Not Found");
+        }
+        if(status){
+            user.setStatus(StatesConstant.ACTIVE);
+            userRepository.saveAndFlush(user);
+            return ResponseEntity.ok(true);
         }
         user.setStatus(StatesConstant.NOTACTIVE);
         userRepository.saveAndFlush(user);

@@ -83,6 +83,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1/profile/**").permitAll()
                 .antMatchers("/admin/input/**").hasAnyRole("ADMIN","ADMIN_WAREHOUSE")
                 .antMatchers("/admin/output/**").hasAnyRole("ADMIN","ADMIN_WAREHOUSE")
+                .antMatchers("/v1/productWarehouse/**").hasAnyRole("ADMIN","ADMIN_WAREHOUSE")
+                .antMatchers("/v1/productStore/**").hasAnyRole("ADMIN","MEMBER")
                 .anyRequest().authenticated() // tất cả các request còn lại phải đc xác thực
                 .and()
                 .exceptionHandling()

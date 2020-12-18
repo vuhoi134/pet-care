@@ -28,8 +28,8 @@ public class UserControllerApi {
     }
 
     @PutMapping(value = "edit/{userID}")
-    public ResponseEntity<?> edit(@PathVariable Long userID){
-        return userServices.edit(userID);
+    public ResponseEntity<?> edit(@PathVariable Long userID,@RequestParam(name = "status") Boolean status){
+        return userServices.edit(userID,status);
     }
 
     @PostMapping(value = "forgot")

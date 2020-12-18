@@ -64,12 +64,17 @@ public class InputService extends BaseServices{
                 ProductWarehouse productWarehouse=new ProductWarehouse();
                 productWarehouse.setCodeTag(codeTag);
                 productWarehouse.setProducts(product);
-                productWarehouse.setExpiryDate(item.getExpiryDate().getTime());
-//                productWarehouse.setExpiryDate(new Date().getTime());
+                if(item.getExpiryDate()==null){
+                    productWarehouse.setExpiryDate(0L);
+                    inputDetail.setExpiryDate(0L);
+                }else{
+                    productWarehouse.setExpiryDate(item.getExpiryDate().getTime());
+                    inputDetail.setExpiryDate(item.getExpiryDate().getTime());
+                }
                 productWarehouse.setQuantityWarehouse(item.getActualAmount());
                 productWarehouse.setWarehouse(warehouse);
-                    inputDetailRepository.save(inputDetail);
-                    productWarehouseRepository.save(productWarehouse);
+                inputDetailRepository.save(inputDetail);
+                productWarehouseRepository.save(productWarehouse);
             }
 
             result.setMessage("Create input success!!");

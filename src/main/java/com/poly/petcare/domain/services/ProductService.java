@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -360,7 +361,8 @@ public class ProductService extends BaseServices {
 
     public DataApiResult listProductAdmin(Integer page,Integer limit) {
         DataApiResult result=new DataApiResult();
-        Pageable pageable = PageRequest.of(page, limit);
+        Sort sort = Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(page, limit,sort);
         List<ProductResponse> list=new ArrayList<>();
         Page<Product> productList=productRepository.findAll(pageable);
         for (Product p:productList) {

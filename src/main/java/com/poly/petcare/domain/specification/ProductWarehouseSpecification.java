@@ -12,4 +12,13 @@ public class ProductWarehouseSpecification {
     public static Specification<Product> hasProductByName(String content) {
         return (root, query, cb) -> cb.like(root.get("products").get("name"), "%" + content + "%");
     }
+
+//    /**
+//     * Lấy ra danh sách product với ngày hết hạn giảm dần
+//     * @param content
+//     * @return
+//     */
+//    public static Specification<Product> hasProductByName(String content) {
+//        return (root, query, cb) -> cb.like(root.get("products").get("name"), "%" + content + "%");
+//    }
 }

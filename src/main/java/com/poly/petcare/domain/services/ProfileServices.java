@@ -15,6 +15,7 @@ import com.poly.petcare.domain.specification.ProfileSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +77,9 @@ public class ProfileServices extends BaseServices {
             throw new ResourceNotFoundException("Not found profileID" + " " + userID);
         }
         ProfileResponses responses = modelMapper.profileResponses(profile.get());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = formatter.format(profile.get().getBirthDay());
+        responses.setBirthDay(strDate);
         return ResponseEntity.ok(responses);
     }
 
@@ -92,7 +97,8 @@ public class ProfileServices extends BaseServices {
     }
     public DataApiResult listProfile(Integer status,Integer page,Integer limit){
         DataApiResult result=new DataApiResult();
-        Pageable pageable = PageRequest.of(page, limit);
+        Sort sort=Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(page, limit,sort);
         Page<User> list;
         if(status==1) {
             list=userRepository.findAllByStatus(StatesConstant.ACTIVE,pageable);
@@ -102,14 +108,19 @@ public class ProfileServices extends BaseServices {
             list=userRepository.findAllByRoles(pageable);
         }
         List<ProfileResponses> responsesList=new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (User use:list) {
+            String strDate ="";
+            if(use.getProfile().getBirthDay()!= null) {
+                strDate=formatter.format(use.getProfile().getBirthDay());
+            }
             ProfileResponses profileResponses=new ProfileResponses();
             profileResponses.setId(use.getId());
             profileResponses.setFullName(use.getProfile().getFullName());
             profileResponses.setPhoneNumber(use.getProfile().getPhoneNumber());
             profileResponses.setEmail(use.getProfile().getEmail());
             profileResponses.setAddress(use.getProfile().getAddress());
-            profileResponses.setBirthDay(use.getProfile().getBirthDay());
+            profileResponses.setBirthDay(strDate);
             profileResponses.setGender(use.getProfile().getGender());
             profileResponses.setImage(use.getProfile().getImage());
             if(use.getStatus().equals("ACTIVE")){

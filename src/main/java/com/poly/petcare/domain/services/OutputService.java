@@ -10,6 +10,8 @@ import com.poly.petcare.domain.repository.ProductWarehouseRepository;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -31,6 +33,7 @@ public class OutputService extends BaseServices{
         }
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public BaseApiResult createOutput(OutputDTO outputDTO) {
         BaseApiResult result = new BaseApiResult();
         try {
@@ -50,11 +53,25 @@ public class OutputService extends BaseServices{
                 outputDetail.setActualAmount(item.getActualAmount());
                 outputDetail.setOutput(output1);
                 outputDetail.setCodeTag(item.getCodeTag());
+                outputDetail.setProduct(product);
                 OutputDetail outputDetail1 = outputDetailRepository.save(outputDetail);
                 // trừ số lượng trong kho sản phẩm
                 ProductWarehouse productWarehouse = productWarehouseRepository.findByCodeTag(outputDetail1.getCodeTag());
                 productWarehouse.setQuantityWarehouse(productWarehouse.getQuantityWarehouse() - outputDetail1.getActualAmount());
                 productWarehouseRepository.saveAndFlush(productWarehouse);
+                // công số lượng vào kho ở cửa hàng
+                ProductStore productStore=productStoreRepository.findByCodeTag(outputDetail1.getCodeTag());
+                if(productStore==null){
+                    ProductStore productStore1=new ProductStore();
+                    productStore1.setQuantityStore(outputDetail1.getActualAmount());
+                    productStore1.setProducts(product);
+                    productStore1.setCodeTag(outputDetail1.getCodeTag());
+                    productStore1.setExpiryDate(productWarehouse.getExpiryDate());
+                    productStoreRepository.save(productStore1);
+                }else {
+                    productStore.setQuantityStore(productStore.getQuantityStore() + outputDetail1.getActualAmount());
+                    productStoreRepository.saveAndFlush(productStore);
+                }
             }
             result.setMessage("Create output success!!");
             result.setSuccess(true);
@@ -65,4 +82,6 @@ public class OutputService extends BaseServices{
             return result;
         }
     }
+
+
 }
