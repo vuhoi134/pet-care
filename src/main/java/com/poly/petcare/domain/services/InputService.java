@@ -2,18 +2,30 @@ package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.InputDTO;
 import com.poly.petcare.app.dtos.InputDetailDTO;
+import com.poly.petcare.app.responses.InputDetailResponse;
+import com.poly.petcare.app.responses.InputResponse;
 import com.poly.petcare.app.result.BaseApiResult;
+import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
 import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import com.poly.petcare.domain.mapper.ProductStoreMapper;
 import com.poly.petcare.domain.repository.InputRepository;
 import com.poly.petcare.domain.repository.ProductRepository;
+import com.poly.petcare.domain.specification.InputSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class InputService extends BaseServices{
@@ -45,6 +57,8 @@ public class InputService extends BaseServices{
             input.setWarehouse(warehouse);
             input.setTransporter(inputDTO.getTransporter());
             input.setPhoneTransporter(inputDTO.getPhoneTransporter());
+            input.setStatus(inputDTO.getStatus());
+            input.setMoney(inputDTO.getMoney());
             Input input1 = inputRepository.save(input);
 
             // Tạo phiêu nhập chi tiết
@@ -61,20 +75,46 @@ public class InputService extends BaseServices{
                 inputDetail.setSupplier(supplier);
                 inputDetail.setInput(input1);
                 inputDetail.setCodeTag(codeTag);
-                ProductWarehouse productWarehouse=new ProductWarehouse();
-                productWarehouse.setCodeTag(codeTag);
-                productWarehouse.setProducts(product);
+
                 if(item.getExpiryDate()==null){
-                    productWarehouse.setExpiryDate(0L);
-                    inputDetail.setExpiryDate(0L);
+                    ProductWarehouse pW=productWarehouseRepository.findByProducts_Id(product.getId());
+                    if(pW != null){
+                        inputDetail.setExpiryDate(0L);
+                        pW.setQuantityWarehouse(pW.getQuantityWarehouse()+item.getActualAmount());
+                        pW.setWarehouse(warehouse);
+                        inputDetailRepository.save(inputDetail);
+                        productWarehouseRepository.save(pW);
+                    }else {
+                        ProductWarehouse productWarehouse = new ProductWarehouse();
+                        productWarehouse.setCodeTag(codeTag);
+                        productWarehouse.setProducts(product);
+                        productWarehouse.setExpiryDate(0L);
+                        inputDetail.setExpiryDate(0L);
+                        productWarehouse.setQuantityWarehouse(item.getActualAmount());
+                        productWarehouse.setWarehouse(warehouse);
+                        inputDetailRepository.save(inputDetail);
+                        productWarehouseRepository.save(productWarehouse);
+                    }
                 }else{
-                    productWarehouse.setExpiryDate(item.getExpiryDate().getTime());
-                    inputDetail.setExpiryDate(item.getExpiryDate().getTime());
+                    ProductWarehouse pW=productWarehouseRepository.findByExpiryDate(item.getExpiryDate().getTime());
+                    if(pW != null) {
+                        inputDetail.setExpiryDate(item.getExpiryDate().getTime());
+                        pW.setQuantityWarehouse(pW.getQuantityWarehouse() + item.getActualAmount());
+                        pW.setWarehouse(warehouse);
+                        inputDetailRepository.save(inputDetail);
+                        productWarehouseRepository.save(pW);
+                    }else{
+                        ProductWarehouse productWarehouse = new ProductWarehouse();
+                        productWarehouse.setCodeTag(codeTag);
+                        productWarehouse.setProducts(product);
+                        productWarehouse.setExpiryDate(item.getExpiryDate().getTime());
+                        inputDetail.setExpiryDate(item.getExpiryDate().getTime());
+                        productWarehouse.setQuantityWarehouse(item.getActualAmount());
+                        productWarehouse.setWarehouse(warehouse);
+                        inputDetailRepository.save(inputDetail);
+                        productWarehouseRepository.save(productWarehouse);
+                    }
                 }
-                productWarehouse.setQuantityWarehouse(item.getActualAmount());
-                productWarehouse.setWarehouse(warehouse);
-                inputDetailRepository.save(inputDetail);
-                productWarehouseRepository.save(productWarehouse);
             }
 
             result.setMessage("Create input success!!");
@@ -85,5 +125,57 @@ public class InputService extends BaseServices{
             result.setSuccess(false);
             return result;
         }
+    }
+
+    public DataApiResult listInput(Integer page,Integer limit,String name,Integer status){
+        DataApiResult result=new DataApiResult();
+        Sort sort=Sort.by("id").descending();
+        Pageable pageable= PageRequest.of(page,limit,sort);
+        Specification specification=Specification.where(InputSpecification.hasInputByUserName(name));
+        Specification specification1=Specification.where(InputSpecification.hasInputByUserName(name).and(
+                InputSpecification.hasInputByStatus(status)
+        ));
+        Page<Input> inputs;
+        if(status==0){
+            inputs=inputRepository.findAll(specification,pageable);
+        }else{
+            inputs=inputRepository.findAll(specification1,pageable);
+        }
+        List<InputResponse> responseList=new ArrayList<>();
+        for (Input i:inputs) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String strDate = formatter.format(i.getImport_date());
+            InputResponse inputResponse=new InputResponse();
+            inputResponse.setCode(i.getCode());
+            inputResponse.setImportDate(strDate);
+            inputResponse.setUserName(i.getUser().getProfile().getFullName());
+            inputResponse.setWarehouseAddress(i.getWarehouse().getAddress());
+            inputResponse.setStatus(i.getStatus());
+            inputResponse.setMoney(i.getMoney());
+            List<InputDetailResponse> list=new ArrayList<>();
+            for (InputDetail ipd:i.getInputDetails()) {
+                String value="";
+                InputDetailResponse detailResponse=new InputDetailResponse();
+                detailResponse.setActualAmount(ipd.getActualAmount());
+                detailResponse.setTheoreticalAmount(ipd.getTheoreticalAmount());
+                if(ipd.getProduct().getCategoryAttributeValues().size()>0){
+                    value+=" ("+ipd.getProduct().getCategoryAttributeValues().get(0).getValue()+")";
+                }else{
+                    value="";
+                }
+                detailResponse.setProductName(ipd.getProduct().getName()+value);
+                detailResponse.setCodeTag(ipd.getCodeTag());
+                detailResponse.setSupplierName(ipd.getSupplier().getName());
+                detailResponse.setImage(ipd.getProduct().getMainImage());
+                list.add(detailResponse);
+            }
+            inputResponse.setInputDetailResponses(list);
+            responseList.add(inputResponse);
+        }
+        result.setSuccess(true);
+        result.setData(responseList);
+        result.setTotalItem(inputs.getTotalElements());
+        result.setMessage("List Input");
+        return result;
     }
 }

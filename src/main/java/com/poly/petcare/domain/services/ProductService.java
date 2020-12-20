@@ -179,17 +179,20 @@ public class ProductService extends BaseServices {
             throw new ResourceNotFoundException("Not found productImageList:" + productID);
         }
         for (ProductImage i:productImageList) {
-            System.out.println(i.getId()+" ở đây");
             productImageRepository.delete(i);
         }
-        List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
+        ProductAttributeValue productAttributeValue1 = productAttributeValueRepository.findByProductId(productID);
+        if(productAttributeValue1!=null) {
+            productAttributeValueRepository.delete(productAttributeValue1);
+        }
+
         for (Long id : productDTO.getCategoryAttributeValueID()) {
             ProductAttributeValue productAttributeValue = new ProductAttributeValue();
             productAttributeValue.setCategoryAttributeValueId(id);
             productAttributeValue.setProductId(productID);
             productAttributeValueRepository.save(productAttributeValue);
-//            categoryAttributeValues.add(categoryAttributeValue);
         }
+        product.setId(productID);
         product.setCategory(category);
         product.setBrand(brand);
         product.setUnit(productDTO.getUnit());
@@ -197,7 +200,7 @@ public class ProductService extends BaseServices {
         product.setMainImage(productDTO.getMainImage());
         product.setDescriptionShort(productDTO.getDescriptionShort());
         product.setDescriptionLong(productDTO.getDescriptionLong());
-//        product.setCategoryAttributeValues(categoryAttributeValues);
+
         if(productDTO.getImages().size()>0) {
             for (String link : productDTO.getImages()) {
                 ProductImage productImage = new ProductImage();
@@ -381,12 +384,12 @@ public class ProductService extends BaseServices {
         List<OrderDetailRepository.ODD> detailList=orderDetailRepository.topProduct(categoryId);
         List<ProductStoreResponse> responseList=new ArrayList<>();
         for (OrderDetailRepository.ODD item:detailList) {
-            ProductStore productStore=productStoreRepository.findByProducts_Id(item.getProductId());
-            ProductStoreResponse productStoreResponse=productStoreMapper.convertToDTO(productStore);
+            List<ProductStore> productStore=productStoreRepository.findAllByProducts_Id(item.getProductId());
+            ProductStoreResponse productStoreResponse=productStoreMapper.convertToDTO(productStore.get(0));
             ProductResponse productResponse=new ProductResponse();
-            productResponse=productMapper.convertToDTO(productStore.getProducts());
+            productResponse=productMapper.convertToDTO(productStore.get(0).getProducts());
             List<CategoryAttributeValueResponses> listC=new ArrayList<>();
-            for (CategoryAttributeValue c:productStore.getProducts().getCategoryAttributeValues()) {
+            for (CategoryAttributeValue c:productStore.get(0).getProducts().getCategoryAttributeValues()) {
                 CategoryAttributeValueResponses categoryAttributeValueResponses=categoryAttributeValueMapper.convertToDTO(c);
                 listC.add(categoryAttributeValueResponses);
             }

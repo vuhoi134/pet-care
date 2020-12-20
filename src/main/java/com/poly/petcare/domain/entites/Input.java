@@ -3,6 +3,7 @@ package com.poly.petcare.domain.entites;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,12 @@ public class Input {
 
     @Column(name = "import_date")
     private Date import_date;
+
+    @Column(name = "status")
+    private Integer status;
+
+    @Column(name = "money")
+    private BigDecimal money;
 
     @Column(name = "transporter")
     private String transporter;

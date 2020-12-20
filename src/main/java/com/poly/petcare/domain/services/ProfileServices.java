@@ -77,9 +77,13 @@ public class ProfileServices extends BaseServices {
             throw new ResourceNotFoundException("Not found profileID" + " " + userID);
         }
         ProfileResponses responses = modelMapper.profileResponses(profile.get());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String strDate = formatter.format(profile.get().getBirthDay());
-        responses.setBirthDay(strDate);
+        if(profile.get().getBirthDay()!=null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String strDate = formatter.format(profile.get().getBirthDay());
+            responses.setBirthDay(strDate);
+            return ResponseEntity.ok(responses);
+        }
+        responses.setBirthDay(null);
         return ResponseEntity.ok(responses);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public interface OrderDetailRepository extends JpaRepository<OrderDetail,Long>, JpaSpecificationExecutor<OrderDetail> {
     List<OrderDetail> findByOrder(Order order);
 
-    @Query(value="select od.product_id as productId,count(*) as amount from dbo_order_detail as od left join dbo_product as p on od.product_id=p.id \n" +
+    @Query(value="select od.product_id as productId,sum(od.quantity) as amount from dbo_order_detail as od left join dbo_product as p on od.product_id=p.id \n" +
             "where p.category_id= :categoryId \n" +
             "group by productId order by amount desc limit 4;",nativeQuery=true)
     List<ODD> topProduct(@Param("categoryId") Long categoryId);

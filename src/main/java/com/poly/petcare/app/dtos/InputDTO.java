@@ -18,5 +18,7 @@ public class InputDTO {
     private Long warehouseId;
     private String transporter;
     private String phoneTransporter;
+    private Integer status;
+    private BigDecimal money;
     private List<InputDetailDTO> inputDetailDTOS;
 }

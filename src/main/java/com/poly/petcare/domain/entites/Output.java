@@ -21,6 +21,9 @@ public class Output {
     @Column(name = "export_date")
     private Date export_date;
 
+    @Column(name = "status")
+    private Integer status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "user_id")

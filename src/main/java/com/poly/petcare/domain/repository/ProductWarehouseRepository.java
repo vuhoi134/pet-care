@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ProductWarehouseRepository extends JpaRepository<ProductWarehouse,Long>, JpaSpecificationExecutor<ProductWarehouse> {
     ProductWarehouse findByCodeTag(String codeTag);
+    ProductWarehouse findByExpiryDate(Long expiryDate);
+    ProductWarehouse findByProducts_Id(Long id);
 }

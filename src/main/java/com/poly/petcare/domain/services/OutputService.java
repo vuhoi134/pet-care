@@ -2,18 +2,30 @@ package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.dtos.OutputDTO;
 import com.poly.petcare.app.dtos.OutputDetailDTO;
+import com.poly.petcare.app.responses.OutputDetailResponse;
+import com.poly.petcare.app.responses.OutputResponse;
 import com.poly.petcare.app.result.BaseApiResult;
+import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.entites.*;
 import com.poly.petcare.domain.repository.InputRepository;
 import com.poly.petcare.domain.repository.OutputRepository;
 import com.poly.petcare.domain.repository.ProductWarehouseRepository;
+import com.poly.petcare.domain.specification.OutputSpecification;
 import com.poly.petcare.domain.utils.ConverCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OutputService extends BaseServices{
@@ -81,6 +93,41 @@ public class OutputService extends BaseServices{
             result.setSuccess(false);
             return result;
         }
+    }
+
+    public DataApiResult listOutput(Integer page,Integer limit,String name){
+        DataApiResult result=new DataApiResult();
+        Sort sort=Sort.by("id").descending();
+        Pageable pageable= PageRequest.of(page,limit,sort);
+        Specification specification=Specification.where(OutputSpecification.hasOutputByUserName(name));
+        Page<Output> outputs=outputRepository.findAll(specification,pageable);
+        List<OutputResponse> responseList=new ArrayList<>();
+        for (Output op:outputs) {
+            System.out.println(op.getCode()+" ở đây");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String strDate = formatter.format(op.getExport_date());
+            OutputResponse response=new OutputResponse();
+            response.setCode(op.getCode());
+            response.setUserName(op.getUser().getProfile().getFullName());
+            response.setWarehouseAddress(op.getWarehouse().getAddress());
+            response.setExportDate(strDate);
+            List<OutputDetailResponse> list=new ArrayList<>();
+            for (OutputDetail opd:op.getOutputDetails()) {
+                OutputDetailResponse detailResponse=new OutputDetailResponse();
+                detailResponse.setActualAmount(opd.getActualAmount());
+                detailResponse.setCodeTag(opd.getCodeTag());
+                detailResponse.setProductName(opd.getProduct().getName()+" ("+opd.getProduct().getCategoryAttributeValues().get(0).getValue()+")");
+                detailResponse.setImage(opd.getProduct().getMainImage());
+                list.add(detailResponse);
+            }
+            response.setOutputDetailResponses(list);
+            responseList.add(response);
+        }
+        result.setSuccess(true);
+        result.setData(responseList);
+        result.setTotalItem(outputs.getTotalElements());
+        result.setMessage("List Output");
+        return result;
     }
 
 
