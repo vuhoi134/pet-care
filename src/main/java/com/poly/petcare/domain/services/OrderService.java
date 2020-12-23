@@ -466,4 +466,11 @@ public class OrderService extends BaseServices{
         result.setSuccess(true);
         return result;
     }
+
+//    public DataApiResult dashBoarDay(){
+//        DataApiResult result=new DataApiResult();
+//
+//        OrderRepository.DashBoard dashBoard=orderRepository.dashBoardDay();
+//        return result;
+//    }
 }

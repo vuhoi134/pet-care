@@ -96,7 +96,8 @@ public class InputService extends BaseServices{
                         productWarehouseRepository.save(productWarehouse);
                     }
                 }else{
-                    ProductWarehouse pW=productWarehouseRepository.findByExpiryDate(item.getExpiryDate().getTime());
+//                    ProductWarehouse pW=productWarehouseRepository.findByExpiryDate(item.getExpiryDate().getTime());
+                    ProductWarehouse pW=productWarehouseRepository.findByProducts_IdAndExpiryDate(product.getId(),item.getExpiryDate().getTime());
                     if(pW != null) {
                         inputDetail.setExpiryDate(item.getExpiryDate().getTime());
                         pW.setQuantityWarehouse(pW.getQuantityWarehouse() + item.getActualAmount());

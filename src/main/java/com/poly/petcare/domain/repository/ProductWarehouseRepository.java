@@ -8,4 +8,5 @@ public interface ProductWarehouseRepository extends JpaRepository<ProductWarehou
     ProductWarehouse findByCodeTag(String codeTag);
     ProductWarehouse findByExpiryDate(Long expiryDate);
     ProductWarehouse findByProducts_Id(Long id);
+    ProductWarehouse findByProducts_IdAndExpiryDate(Long id,Long expiryDate);
 }

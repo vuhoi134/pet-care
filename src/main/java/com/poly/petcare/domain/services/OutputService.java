@@ -103,7 +103,6 @@ public class OutputService extends BaseServices{
         Page<Output> outputs=outputRepository.findAll(specification,pageable);
         List<OutputResponse> responseList=new ArrayList<>();
         for (Output op:outputs) {
-            System.out.println(op.getCode()+" ở đây");
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String strDate = formatter.format(op.getExport_date());
             OutputResponse response=new OutputResponse();
@@ -116,7 +115,11 @@ public class OutputService extends BaseServices{
                 OutputDetailResponse detailResponse=new OutputDetailResponse();
                 detailResponse.setActualAmount(opd.getActualAmount());
                 detailResponse.setCodeTag(opd.getCodeTag());
-                detailResponse.setProductName(opd.getProduct().getName()+" ("+opd.getProduct().getCategoryAttributeValues().get(0).getValue()+")");
+                if(opd.getProduct().getCategoryAttributeValues().size() >0) {
+                    detailResponse.setProductName(opd.getProduct().getName() + " (" + opd.getProduct().getCategoryAttributeValues().get(0).getValue() + ")");
+                }else{
+                    detailResponse.setProductName(opd.getProduct().getName());
+                }
                 detailResponse.setImage(opd.getProduct().getMainImage());
                 list.add(detailResponse);
             }

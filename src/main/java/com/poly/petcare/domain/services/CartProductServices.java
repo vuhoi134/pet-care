@@ -2,8 +2,11 @@ package com.poly.petcare.domain.services;
 
 import com.poly.petcare.app.responses.CartProductResponse;
 import com.poly.petcare.app.responses.CartResponse;
+import com.poly.petcare.app.responses.CategoryAttributeValueResponses;
+import com.poly.petcare.app.responses.ProductResponse;
 import com.poly.petcare.app.result.DataApiResult;
 import com.poly.petcare.domain.mapper.CartProductMapper;
+import com.poly.petcare.domain.mapper.CategoryAttributeValueMapper;
 import com.poly.petcare.domain.mapper.ProductMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +34,8 @@ public class CartProductServices extends BaseServices {
     @Autowired private CartProductMapper cartProductMapper;
 
     @Autowired private ProductMapper productMapper;
+
+    @Autowired private CategoryAttributeValueMapper categoryAttributeValueMapper;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BaseApiResult addToCart(CartProductDTO dto) {
@@ -170,11 +175,19 @@ public class CartProductServices extends BaseServices {
             for (CartResponse item:cartResponseList) {
                 totalItem+=item.getCartProducts().size();
                 for (CartProduct c:item.getCartProducts()) {
-                    ProductStore productStore=productStoreRepository.findByProducts_Id(c.getProduct().getId());
+                    ProductResponse productResponse=new ProductResponse();
+                    List<ProductStore> productStore=productStoreRepository.findAllByProducts_Id(c.getProduct().getId());
                     CartProductResponse cartProductResponse = cartProductMapper.convertToDTO(c);
-                    cartProductResponse.setProductResponse(productMapper.convertToDTO(c.getProduct()));
+                    productResponse=productMapper.convertToDTO(c.getProduct());
+                    List<CategoryAttributeValueResponses> listC=new ArrayList<>();
+                    for (CategoryAttributeValue cAV:productStore.get(0).getProducts().getCategoryAttributeValues()) {
+                        CategoryAttributeValueResponses categoryAttributeValueResponses=categoryAttributeValueMapper.convertToDTO(cAV);
+                        listC.add(categoryAttributeValueResponses);
+                    }
+                    productResponse.setCategoryAttributeValueResponses(listC);
+                    cartProductResponse.setProductResponse(productResponse);
                     cartProductResponse.setTotalMoney(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
-                    cartProductResponse.setQuantityStore(productStore.getQuantityStore());
+                    cartProductResponse.setQuantityStore(productStore.get(0).getQuantityStore());
                     totalMoney+=(Long.valueOf(c.getAmount() * c.getProduct().getPrice().intValue()));
                     list.add(cartProductResponse);
                 }
@@ -206,10 +219,10 @@ public class CartProductServices extends BaseServices {
             List<CartProductResponse> list=new ArrayList<>();
             Long totalMoney=0L;
             for (CartProduct item:cartProductList) {
-                ProductStore productStore=productStoreRepository.findByProducts_Id(item.getProduct().getId());
+                List<ProductStore> productStore=productStoreRepository.findAllByProducts_Id(item.getProduct().getId());
                 CartProductResponse c=cartProductMapper.convertToDTO(item);
                 c.setProductResponse(productMapper.convertToDTO(item.getProduct()));
-                c.setQuantityStore(productStore.getQuantityStore());
+                c.setQuantityStore(productStore.get(0).getQuantityStore());
                 totalMoney+=(Long.valueOf(item.getAmount()*item.getProduct().getPrice().intValue()));
                 list.add(c);
             }

@@ -23,7 +23,7 @@ public class CartProduct {
     private Integer amount;
 
     @Column(name = "discount")
-    private Integer discount;
+    private String discount;
 
     @Column(name = "status")
     private Boolean status;

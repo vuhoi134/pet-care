@@ -91,17 +91,6 @@ public class ProductService extends BaseServices {
     public ResponseEntity createProduct(ProductDTO dto) {
         Category category = categoryRepository.getOne(dto.getCategoryId());
         Brand brand = brandRepository.getOne(dto.getBrandId());
-        List<CategoryAttributeValue> categoryAttributeValues = new ArrayList<>();
-        if(dto.getCategoryAttributeValueID().size()>0) {
-            for (Long id : dto.getCategoryAttributeValueID()) {
-                CategoryAttributeValue Value = new CategoryAttributeValue();
-                Value.setId(id);
-                categoryAttributeValues.add(Value);
-            }
-        }else{
-            categoryAttributeValues=null;
-        }
-
         if (ConverCode.convertCode(codeMax, dto.getCode(), "SP").startsWith("SP")) {
             codeMax += 1;
         }
@@ -116,7 +105,6 @@ public class ProductService extends BaseServices {
                 .price(dto.getPrice())
                 .status(true)
                 .unit(dto.getUnit())
-                .categoryAttributeValues(categoryAttributeValues)
                 .build();
         try {
             Product p=productRepository.save(product);
@@ -126,6 +114,14 @@ public class ProductService extends BaseServices {
                     productImage.setLink(link);
                     productImage.setProduct(p);
                     productImageRepository.save(productImage);
+                }
+            }
+            if(dto.getCategoryAttributeValueID().size()>0) {
+                for (Long id : dto.getCategoryAttributeValueID()) {
+                    ProductAttributeValue pAV=new ProductAttributeValue();
+                    pAV.setProductId(p.getId());
+                    pAV.setCategoryAttributeValueId(id);
+                    productAttributeValueRepository.save(pAV);
                 }
             }
             return ResponseEntity.ok(true);
@@ -184,37 +180,72 @@ public class ProductService extends BaseServices {
         ProductAttributeValue productAttributeValue1 = productAttributeValueRepository.findByProductId(productID);
         if(productAttributeValue1!=null) {
             productAttributeValueRepository.delete(productAttributeValue1);
-        }
-
-        for (Long id : productDTO.getCategoryAttributeValueID()) {
-            ProductAttributeValue productAttributeValue = new ProductAttributeValue();
-            productAttributeValue.setCategoryAttributeValueId(id);
-            productAttributeValue.setProductId(productID);
-            productAttributeValueRepository.save(productAttributeValue);
-        }
-        product.setId(productID);
-        product.setCategory(category);
-        product.setBrand(brand);
-        product.setUnit(productDTO.getUnit());
-        product.setName(productDTO.getName());
-        product.setMainImage(productDTO.getMainImage());
-        product.setDescriptionShort(productDTO.getDescriptionShort());
-        product.setDescriptionLong(productDTO.getDescriptionLong());
-
-        if(productDTO.getImages().size()>0) {
-            for (String link : productDTO.getImages()) {
-                ProductImage productImage = new ProductImage();
-                productImage.setLink(link);
-                productImage.setProduct(product);
-                productImageRepository.save(productImage);
+            for (Long id : productDTO.getCategoryAttributeValueID()) {
+                ProductAttributeValue productAttributeValue = new ProductAttributeValue();
+                productAttributeValue.setCategoryAttributeValueId(id);
+                productAttributeValue.setProductId(productID);
+                System.out.println(" vào");
+                productAttributeValueRepository.save(productAttributeValue);
             }
-        }
-        try {
-            productRepository.saveAndFlush(product);
-            return ResponseEntity.ok(true);
-        }catch(Exception e){
-            System.out.println(e);
-            return ResponseEntity.badRequest().body("FALSE "+e);
+//        product.setId(productID);
+            product.setCategory(category);
+            product.setBrand(brand);
+            product.setUnit(productDTO.getUnit());
+            product.setName(productDTO.getName());
+            product.setMainImage(productDTO.getMainImage());
+            product.setDescriptionShort(productDTO.getDescriptionShort());
+            product.setDescriptionLong(productDTO.getDescriptionLong());
+            product.setPrice(productDTO.getPrice());
+
+            if(productDTO.getImages().size()>0) {
+                for (String link : productDTO.getImages()) {
+                    ProductImage productImage = new ProductImage();
+                    productImage.setLink(link);
+                    productImage.setProduct(product);
+                    productImageRepository.save(productImage);
+                }
+            }
+            try {
+                productRepository.saveAndFlush(product);
+                return ResponseEntity.ok(true);
+            }catch(Exception e){
+                System.out.println(e);
+                return ResponseEntity.badRequest().body("FALSE "+e);
+            }
+        }else {
+
+            for (Long id : productDTO.getCategoryAttributeValueID()) {
+                ProductAttributeValue productAttributeValue = new ProductAttributeValue();
+                productAttributeValue.setCategoryAttributeValueId(id);
+                productAttributeValue.setProductId(productID);
+                System.out.println(" vào");
+                productAttributeValueRepository.save(productAttributeValue);
+            }
+//        product.setId(productID);
+            product.setCategory(category);
+            product.setBrand(brand);
+            product.setUnit(productDTO.getUnit());
+            product.setName(productDTO.getName());
+            product.setMainImage(productDTO.getMainImage());
+            product.setDescriptionShort(productDTO.getDescriptionShort());
+            product.setDescriptionLong(productDTO.getDescriptionLong());
+            product.setPrice(productDTO.getPrice());
+
+            if (productDTO.getImages().size() > 0) {
+                for (String link : productDTO.getImages()) {
+                    ProductImage productImage = new ProductImage();
+                    productImage.setLink(link);
+                    productImage.setProduct(product);
+                    productImageRepository.save(productImage);
+                }
+            }
+            try {
+                productRepository.saveAndFlush(product);
+                return ResponseEntity.ok(true);
+            } catch (Exception e) {
+                System.out.println(e);
+                return ResponseEntity.badRequest().body("FALSE " + e);
+            }
         }
 
     }
