@@ -40,11 +40,11 @@ public class CartProductServices extends BaseServices {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BaseApiResult addToCart(CartProductDTO dto) {
         BaseApiResult result = new BaseApiResult();
-        ProductStore productStore = productStoreRepository.getOne(dto.getProductId());
+        List<ProductStore> productStore = productStoreRepository.findAllByProducts_Id(dto.getProductId());
         if (dto.getGuid() != null && dto.getProductId() > 0 && dto.getUserId()==0) { // khách hàng vãng lai
             Cart cartEntity = cartRepository.findByGuid(dto.getGuid());
             Product productEntity = productRepository.getOne(dto.getProductId());
-            if (dto.getAmount() > productStore.getQuantityStore()){
+            if (dto.getAmount() > productStore.get(0).getQuantityStore()){
                 throw new ResourceNotFoundException("Quantity must not be exceeded");
             }
 
@@ -52,9 +52,9 @@ public class CartProductServices extends BaseServices {
                 CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cartEntity.getId(), productEntity.getId());
                 if (cartProductEntity != null) {
                     cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore() - dto.getAmount());
                     cartProductRepository.saveAndFlush(cartProductEntity);
-                    productStoreRepository.saveAndFlush(productStore);
+                    productStoreRepository.saveAndFlush(productStore.get(0));
                 } else {
                     CartProduct cartProduct = new CartProduct();
                     cartProduct.setAmount(dto.getAmount());
@@ -94,7 +94,7 @@ public class CartProductServices extends BaseServices {
         }
         if(dto.getUserId()>0 && dto.getProductId() > 0){ // khách hàng có tài khoản
             Product productEntity = productRepository.getOne(dto.getProductId());
-            if (dto.getAmount() > productStore.getQuantityStore()){
+            if (dto.getAmount() > productStore.get(0).getQuantityStore()){
                 throw new ResourceNotFoundException("Quantity must not be exceeded");
             }
 
@@ -104,9 +104,9 @@ public class CartProductServices extends BaseServices {
                 CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cartEntity.getId(), productEntity.getId());
                 if (cartProductEntity != null) {
                     cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore() - dto.getAmount());
                     cartProductRepository.saveAndFlush(cartProductEntity);
-                    productStoreRepository.saveAndFlush(productStore);
+                    productStoreRepository.saveAndFlush(productStore.get(0));
                 } else {
                     CartProduct cartProduct = new CartProduct();
                     cartProduct.setAmount(dto.getAmount());
@@ -130,9 +130,9 @@ public class CartProductServices extends BaseServices {
                 CartProduct cartProductEntity = cartProductRepository.findFirstCartProductByCartIdAndProductId(cart1.getId(), productEntity.getId());
                 if (cartProductEntity != null) {
                     cartProductEntity.setAmount(cartProductEntity.getAmount() + dto.getAmount());
-                    productStore.setQuantityStore(productStore.getQuantityStore() - dto.getAmount());
+                    productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore() - dto.getAmount());
                     cartProductRepository.saveAndFlush(cartProductEntity);
-                    productStoreRepository.saveAndFlush(productStore);
+                    productStoreRepository.saveAndFlush(productStore.get(0));
                 } else {
                     CartProduct cartProduct = new CartProduct();
                     cartProduct.setAmount(dto.getAmount());

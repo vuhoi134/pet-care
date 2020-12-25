@@ -98,7 +98,7 @@ public class OrderService extends BaseServices{
                 List<OrderDetail> orderDetailList=new ArrayList<>();
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                     OrderDetail orderDetail=new OrderDetail();
-                    ProductStore productStore = productStoreRepository.getOne(item.getProductId());
+                    List<ProductStore> productStore = productStoreRepository.findAllByProducts_Id(item.getProductId());
                     orderDetail.setOrder(order2);
                     orderDetail.setPrice(item.getPrice());
                     orderDetail.setQuantity(item.getQuantity());
@@ -106,8 +106,8 @@ public class OrderService extends BaseServices{
                     orderDetailRepository.save(orderDetail);
 
                     //trừ số lượng sản phẩm trên cửa hàng
-                    productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
-                    productStoreRepository.saveAndFlush(productStore);
+                    productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore()-item.getQuantity());
+                    productStoreRepository.saveAndFlush(productStore.get(0));
                     orderDetailList.add(orderDetail);
                 }
                 Profile profile=new Profile();
@@ -166,7 +166,7 @@ public class OrderService extends BaseServices{
             List<OrderDetail> orderDetailList=new ArrayList<>();
             for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
                 OrderDetail orderDetail=new OrderDetail();
-                ProductStore productStore = productStoreRepository.getOne(item.getProductId());
+                List<ProductStore> productStore = productStoreRepository.findAllByProducts_Id(item.getProductId());
                 orderDetail.setOrder(order2);
                 orderDetail.setPrice(item.getPrice());
                 orderDetail.setQuantity(item.getQuantity());
@@ -174,8 +174,8 @@ public class OrderService extends BaseServices{
                 orderDetailRepository.save(orderDetail);
 
                 //trừ số lượng sản phẩm trên cửa hàng
-                productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
-                productStoreRepository.saveAndFlush(productStore);
+                productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore()-item.getQuantity());
+                productStoreRepository.saveAndFlush(productStore.get(0));
                 orderDetailList.add(orderDetail);
             }
             // xóa giỏ hàng chi tiết
@@ -296,7 +296,7 @@ public class OrderService extends BaseServices{
                 }
 
                 for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
-                    ProductStore productStore = productStoreRepository.getOne(item.getProductId());
+                    List<ProductStore> productStore = productStoreRepository.findAllByProducts_Id(item.getProductId());
                     OrderDetail orderDetail=new OrderDetail();
                     orderDetail.setOrder(order2);
                     orderDetail.setPrice(item.getPrice());
@@ -304,8 +304,8 @@ public class OrderService extends BaseServices{
                     orderDetail.setProduct(productRepository.getOne(item.getProductId()));
 
                     //trừ số lượng sản phẩm trên cửa hàng
-                    productStore.setQuantityStore(productStore.getQuantityStore()-item.getQuantity());
-                    productStoreRepository.saveAndFlush(productStore);
+                    productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore()-item.getQuantity());
+                    productStoreRepository.saveAndFlush(productStore.get(0));
 
                     orderDetailRepository.save(orderDetail);
                 }
@@ -432,6 +432,7 @@ public class OrderService extends BaseServices{
 
         // tạo đơn hàng chi tiết mới
         for (OrderDetailDTO item:orderDTO.getOrderDetailDTOS()) {
+            List<ProductStore> productStore = productStoreRepository.findAllByProducts_Id(item.getProductId());
             OrderDetail orderDetail=new OrderDetail();
             orderDetail.setOrder(order2);
             orderDetail.setPrice(item.getPrice());
@@ -439,6 +440,10 @@ public class OrderService extends BaseServices{
             orderDetail.setProduct(productRepository.getOne(item.getProductId()));
             System.out.println(item.getQuantity()+" Có mà");
             orderDetailRepository.saveAndFlush(orderDetail);
+
+            //trừ số lượng sản phẩm trên cửa hàng
+            productStore.get(0).setQuantityStore(productStore.get(0).getQuantityStore()-item.getQuantity());
+            productStoreRepository.saveAndFlush(productStore.get(0));
         }
         result.setMessage("Update Order Success!");
         result.setSuccess(true);
